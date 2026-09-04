@@ -5,7 +5,11 @@ plugins {
     // is gone, and the Compose compiler comes with buildFeatures.compose.
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.maven.publish)
 }
+
+version = "0.1.0"
+group = "dev.drawably"
 
 android {
     namespace = "dev.drawably.compose"
@@ -29,9 +33,34 @@ android {
         unitTests.isReturnDefaultValues = true
     }
 
-    publishing {
-        singleVariant("release") {
-            withSourcesJar()
+}
+
+// Configured, never run: publishing needs credentials and a signing key this
+// repository does not carry. `./gradlew publishToMavenLocal` works for trying a
+// consumer against an unreleased build.
+mavenPublishing {
+    publishToMavenCentral()
+    signAllPublications()
+    coordinates(group.toString(), "drawably-compose", version.toString())
+
+    pom {
+        name.set("Drawably for Jetpack Compose")
+        description.set("Hand-drawn UI controls that sketch themselves fresh on every composition.")
+        url.set("https://www.drawably.dev")
+        licenses {
+            license {
+                name.set("MIT License")
+                url.set("https://opensource.org/licenses/MIT")
+            }
+        }
+        developers {
+            developer {
+                id.set("dmerault")
+                name.set("Dimitri Merault")
+            }
+        }
+        scm {
+            url.set("https://github.com/dmerault/drawably-android")
         }
     }
 }

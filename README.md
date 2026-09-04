@@ -4,8 +4,11 @@ A Compose port of [Drawably](https://www.drawably.dev) — hand-drawn UI control
 that sketch themselves fresh on every composition, boil gently while idle, and
 re-sketch when you touch them.
 
-> Work in progress. The stroke engine is complete and verified against the
-> upstream JavaScript library; components are landing next.
+```kotlin
+DrawablyTheme {
+    DrawablyButton("Done", onClick = ::submit, variant = DrawablyButtonVariant.Solid)
+}
+```
 
 ## Requirements
 
@@ -16,12 +19,68 @@ bundled runtime works:
 export JAVA_HOME="/Applications/Android Studio.app/Contents/jbr/Contents/Home"
 ```
 
-## Modules
+The library depends on Compose Foundation, not Material, so it drops into any
+Compose app whatever design system it already uses.
 
-| Module | What it is |
+## Components
+
+All fifteen upstream controls, with upstream's defaults.
+
+| Component | What it is |
 | --- | --- |
-| `:drawably` | the library (`dev.drawably.compose`) |
-| `:showcase` | a catalog app demonstrating every component |
+| `DrawablyButton` | Three variants (`Outline`, `Solid`, `Scribble`), three tones (`Standard`, `Neutral`, `Danger`), four states (`Idle`, `Loading`, `Error`, `Success`). Re-sketches on press and hover. |
+| `DrawablyCard` | A sketched box to group content in. |
+| `DrawablyCheckbox` | The tick is drawn on stroke by stroke over 240ms. |
+| `DrawablyRadioButton` | A ring that gains a dot when picked. |
+| `DrawablySwitch` | A pill with an ink blob that slides across it. |
+| `DrawablyTextField` | One line of text in a sketched box. |
+| `DrawablyTextArea` | Several lines of it. |
+| `DrawablySelect` | A pen chevron and a sketched popup; the box is pre-sized to the widest option so picking never shifts the layout. |
+| `DrawablyDivider` | A pen line across the available width. |
+| `DrawablyBadge` | A small sharp-cornered tag. `Outline` or `Scribble`. |
+| `DrawablyList` | Bullets drawn in the gutter. `Dash` or `Check`. |
+| `DrawablyDecoratedText` | `Underline`, `Highlight` or `Circle`, one mark per line the text wraps onto. |
+| `Modifier.drawablyUnderline()` / `drawablyHighlight()` / `drawablyCircle()` | The same marks as a single box, for anything that is not text. |
+| `DrawablyArrowLayer` | A sketched arrow between two named anchors. |
+
+Every control wraps a real Foundation control — `toggleable`, `selectable`,
+`BasicTextField` — so TalkBack, focus and keyboard all behave as they would
+without the sketch, which is drawn behind them and carries no semantics.
+
+## Theming
+
+`DrawablyTheme` mirrors upstream's CSS custom properties, defaults included:
+
+| Property | Default | What it does |
+| --- | --- | --- |
+| `stroke` | `#2724d1` | Line colour |
+| `fill` | `#2724d1` | Filled layers: a solid button's blob, a radio's dot, a highlight's wash |
+| `paper` | white | What the ink sits on; a solid button's label is drawn in it |
+| `width` | `2.dp` | Stroke width for ordinary layers |
+| `error` / `success` | `#d12724` / `#188a42` | Semantic ink |
+| `roughness` | `1.0` | Jitter amplitude of the base sketch |
+| `boil` | `0.3` | Per-frame flicker amplitude; `0` renders a still sketch |
+
+```kotlin
+DrawablyTheme(DrawablyTheme(stroke = Color.Black, fill = Color.Black, roughness = 1.6)) {
+    // everything below draws in a thicker, wobblier black pen
+}
+```
+
+Pass `seed` to any control to pin its sketch — useful in previews and
+screenshot tests. Unpinned, a control picks a fresh seed on first composition
+and rolls another whenever it is pressed or hovered.
+
+## Motion
+
+Upstream boils by stepping a CSS custom property through three pre-rendered
+frames every 1200ms, and speeds that up to 450ms while a button is loading. The
+same thing happens here on a ticker: three frames are generated once per box
+size, seed and options, and the draw pass only picks which one to stroke.
+
+Turning animations off — developer options, or accessibility settings — zeroes
+`ANIMATOR_DURATION_SCALE`, which stops the boil and the re-sketch entirely, the
+same way `prefers-reduced-motion` does upstream.
 
 ## Fidelity
 
@@ -31,32 +90,47 @@ the published npm package and assert the ported engine emits **byte-identical**
 path data — the same PRNG stream, the same sample counts, the same boil frames,
 for all 26 control layers.
 
-Getting there needed two deliberate JVM/JavaScript reconciliations, both in
-`core/JsMath.kt` and `core/SvgPath.kt`:
+Getting there needed three deliberate reconciliations:
 
-- **Trigonometry.** V8 implements `cos`, `sin` and `atan2` with fdlibm, as does
-  `StrictMath`; `java.lang.Math` uses intrinsics that differ in the last ulp.
-  That is invisible in a rounded coordinate but decides `ceil(length / step)`,
-  and an arrow head is exactly 12 long sampled every 4 — one extra sample point
-  shifts every later PRNG draw.
-- **Number formatting.** `Number.prototype.toFixed(2)` rounds exact halves away
-  from zero; `"%.2f"` rounds them to even. `0.125` is `0.13` upstream and would
-  be `0.12` here.
+- **Trigonometry** (`core/JsMath.kt`). V8 implements `cos`, `sin` and `atan2`
+  with fdlibm, as does `StrictMath`; `java.lang.Math` uses intrinsics that
+  differ in the last ulp. That is invisible in a rounded coordinate but decides
+  `ceil(length / step)`, and an arrow head is exactly 12 long sampled every 4 —
+  one extra sample point shifts every later PRNG draw.
+- **`Math.hypot`** (same file). V8 scales by the larger component and takes the
+  square root before multiplying back; `java.lang.Math.hypot` is more accurate,
+  which here means different.
+- **Number formatting** (`core/SvgPath.kt`). `Number.prototype.toFixed(2)`
+  rounds exact halves away from zero; `"%.2f"` rounds them to even. `0.125` is
+  `0.13` upstream and would be `0.12` here.
 
-Regenerate the fixtures with:
+Geometry is also generated in density-independent units and the canvas scaled to
+pixels around it. Roughness is an absolute amplitude, so generating against a
+pixel size makes the jitter three times finer on a 3x screen than on the web.
+
+Regenerate the fixtures against a new upstream version with:
 
 ```sh
 cd Tools && npm i drawably@0.3.10 && node gen-goldens.mjs > ../drawably/src/test/resources/goldens.json
 ```
 
-## Development
+## Modules
+
+| Module | What it is |
+| --- | --- |
+| `:drawably` | the library (`dev.drawably.compose`) |
+| `:showcase` | a catalog app demonstrating every component |
 
 ```sh
 ./gradlew :drawably:testDebugUnitTest   # engine goldens
-./gradlew :showcase:assembleDebug
+./gradlew :showcase:installDebug        # the catalog app
 ./gradlew lint
 ```
 
+Publishing to Maven Central is configured with the vanniktech plugin but has
+never been run; it needs credentials and a signing key this repository does not
+carry.
+
 ## Licence
 
-MIT. See `NOTICE` for upstream attribution.
+MIT. Upstream Drawably is © 2026 Daniel Belyi, MIT licensed — see `NOTICE`.

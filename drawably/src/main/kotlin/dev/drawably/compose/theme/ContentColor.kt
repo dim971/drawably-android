@@ -1,9 +1,12 @@
 package dev.drawably.compose.theme
 
+import androidx.compose.foundation.text.BasicText
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ProvidableCompositionLocal
 import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 
 /**
  * The colour a control's own label should be drawn in.
@@ -20,11 +23,11 @@ public val LocalDrawablyContentColor: ProvidableCompositionLocal<Color> =
 @Composable
 public fun DrawablyText(
     text: String,
-    modifier: androidx.compose.ui.Modifier = androidx.compose.ui.Modifier,
+    modifier: Modifier = Modifier,
     color: Color = LocalDrawablyContentColor.current,
-    style: androidx.compose.ui.text.TextStyle = androidx.compose.ui.text.TextStyle.Default,
+    style: TextStyle = TextStyle.Default,
 ) {
-    androidx.compose.foundation.text.BasicText(
+    BasicText(
         text = text,
         modifier = modifier,
         style = style.copy(color = color),
