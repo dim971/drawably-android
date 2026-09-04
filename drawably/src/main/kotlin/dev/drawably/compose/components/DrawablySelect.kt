@@ -196,12 +196,18 @@ private fun <T> DrawablySelectOptions(
     }
 }
 
-/** Puts a popup immediately below its anchor, aligned to its leading edge. */
+/** Puts a popup immediately below its anchor, centred on it. */
 private class BelowAnchor(private val gap: Int) : PopupPositionProvider {
     override fun calculatePosition(
         anchorBounds: IntRect,
         windowSize: IntSize,
         layoutDirection: LayoutDirection,
         popupContentSize: IntSize,
-    ): IntOffset = IntOffset(anchorBounds.left, anchorBounds.bottom + gap)
+    ): IntOffset {
+        val centred = anchorBounds.left + (anchorBounds.width - popupContentSize.width) / 2
+        return IntOffset(
+            centred.coerceIn(0, (windowSize.width - popupContentSize.width).coerceAtLeast(0)),
+            anchorBounds.bottom + gap,
+        )
+    }
 }

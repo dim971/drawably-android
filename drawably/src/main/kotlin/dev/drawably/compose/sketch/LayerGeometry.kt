@@ -154,9 +154,6 @@ public object DrawablyGeometry {
     public const val POPUP_TAIL_HEIGHT: Double = 10.0
     public const val POPUP_TAIL_WIDTH: Double = 18.0
 
-    /** How far the tail sits from the popup's leading edge. */
-    public const val POPUP_TAIL_INSET: Double = 14.0
-
     /** The popup's frame, which starts below the space the tail occupies. */
     public fun popupFrame(w: Double, h: Double, o: RoughOptions): SketchPath = Rough.roundedRect(
         INSET,
@@ -175,7 +172,8 @@ public object DrawablyGeometry {
      */
     @Suppress("UNUSED_PARAMETER")
     public fun popupTail(w: Double, h: Double, o: RoughOptions): SketchPath {
-        val left = min(INSET + POPUP_TAIL_INSET, w - INSET - POPUP_TAIL_WIDTH)
+        // centred, because the popup is centred under the control it belongs to
+        val left = (w - POPUP_TAIL_WIDTH) / 2
         val apexX = left + POPUP_TAIL_WIDTH / 2
         val baseY = INSET + POPUP_TAIL_HEIGHT
         return Rough.line(left, baseY, apexX, INSET, o) +
