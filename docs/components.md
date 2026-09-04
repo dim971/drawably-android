@@ -4,6 +4,8 @@ Every control takes an optional `seed`; see [theming.md](theming.md#seeds).
 
 ## Button
 
+<img src="images/components/button.png" alt="Six buttons: a solid one, a scribbled one, an outline, a neutral, a danger and a success">
+
 ```kotlin
 DrawablyButton("Done", ::submit, variant = DrawablyButtonVariant.Solid)
 DrawablyButton(onClick = ::submit) { DrawablyText("Done") }
@@ -26,6 +28,8 @@ DrawablyButton(onClick = ::submit) { DrawablyText("Done") }
 
 ## Card
 
+<img src="images/components/card.png" alt="A sketched box around a monospaced command and a caption">
+
 ```kotlin
 DrawablyCard { DrawablyText("npm i drawably") }
 ```
@@ -33,6 +37,8 @@ DrawablyCard { DrawablyText("npm i drawably") }
 A sketched box with 16dp of padding.
 
 ## Checkbox
+
+<img src="images/components/checkbox.png" alt="Two checkboxes, one ticked and one empty, each with a label">
 
 ```kotlin
 DrawablyCheckbox(agreed, { agreed = it }) { DrawablyText("Ship it") }
@@ -44,6 +50,8 @@ faded in — upstream animates `stroke-dashoffset`, this trims the path.
 
 ## Radio button
 
+<img src="images/components/radio.png" alt="Two radio rings, the first with its dot">
+
 ```kotlin
 DrawablyRadioButton(tool == Pen, { tool = Pen }) { DrawablyText("Pen") }
 ```
@@ -51,6 +59,8 @@ DrawablyRadioButton(tool == Pen, { tool = Pen }) { DrawablyText("Pen") }
 22dp square, `Role.RadioButton`. The dot pops in from half size.
 
 ## Switch
+
+<img src="images/components/toggle.png" alt="Two pill switches, one on and one off">
 
 ```kotlin
 DrawablySwitch(boiling, { boiling = it }) { DrawablyText("Boil") }
@@ -61,6 +71,9 @@ lands centred at either end.
 
 ## Text field and text area
 
+<img src="images/components/textfield.png" alt="A single line of text in a sketched box">
+<img src="images/components/texteditor.png" alt="Two lines of text in a taller sketched box">
+
 ```kotlin
 DrawablyTextField(name, { name = it }, placeholder = "your name")
 DrawablyTextArea(notes, { notes = it }, minHeight = 96.dp)
@@ -70,6 +83,9 @@ Real `BasicTextField`s inside the shared sketched box, with the focus ring shown
 on focus. Neither re-sketches on hover, matching upstream.
 
 ## Select
+
+<img src="images/components/picker.png" alt="A sketched field showing the chosen option and a pen chevron">
+<img src="images/components/picker-open.png" alt="The same field with its list open below it, a pen tail pointing back at the field and a tick beside the chosen option">
 
 ```kotlin
 DrawablySelect(weight, listOf("Light", "Medium", "Heavy"), { weight = it })
@@ -86,6 +102,8 @@ points at something. A tap anywhere else closes it.
 
 ## Divider
 
+<img src="images/components/divider.png" alt="A pen line across the width">
+
 ```kotlin
 DrawablyDivider()
 ```
@@ -93,6 +111,8 @@ DrawablyDivider()
 A pen line across the available width, in a 10dp-tall box.
 
 ## Badge
+
+<img src="images/components/badge.png" alt="Two small tags, one outlined and one hatched">
 
 ```kotlin
 DrawablyBadge { DrawablyText("v0.1.0") }
@@ -104,6 +124,8 @@ the label stays clear of the outline however thick or rough the pen gets.
 
 ## List
 
+<img src="images/components/list.png" alt="Two lists, one with dash markers and one with pen ticks">
+
 ```kotlin
 DrawablyList(steps, marker = DrawablyListMarker.Check) { step ->
     DrawablyText(step)
@@ -113,6 +135,10 @@ DrawablyList(steps, marker = DrawablyListMarker.Check) { step ->
 Markers are drawn in the 24dp leading gutter, each row seeded by its index.
 
 ## Text decorations
+
+<img src="images/components/underline.png" alt="A pen line under a phrase">
+<img src="images/components/highlight.png" alt="A marker swipe behind a phrase">
+<img src="images/components/circle.png" alt="A pen loop around a phrase">
 
 ```kotlin
 DrawablyDecoratedText("a fresh pen sketch", DrawablyDecoration.Underline)
@@ -126,6 +152,8 @@ control default of 2 — body copy is thinner than chrome.
 
 ## Arrow
 
+<img src="images/components/arrow.png" alt="A sketched arrow from a label to a button">
+
 ```kotlin
 DrawablyArrowLayer(arrows = listOf(DrawablyArrow("hint", "send"))) {
     DrawablyText("start here", modifier = Modifier.drawablyAnchor("hint"))
@@ -138,6 +166,8 @@ scrolls. The arrow runs centre to centre, pulled back to each box's edge plus a
 little clearance.
 
 ## Tilt
+
+<img src="images/components/tilt.png" alt="Three buttons each leaning a slightly different way">
 
 ```kotlin
 DrawablyButton("Done", {}, modifier = Modifier.drawablyTilt())
