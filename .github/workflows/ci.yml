@@ -1,0 +1,58 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build, test and lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      # The engine is pinned to the JavaScript original's output; a failure here
+      # means the port has drifted. See docs/fidelity.md.
+      - name: Unit tests, including the engine goldens
+        run: ./gradlew :drawably:testDebugUnitTest
+
+      - name: Build the library
+        run: ./gradlew :drawably:assembleRelease
+
+      - name: Build the showcase
+        run: ./gradlew :showcase:assembleDebug
+
+      - name: Android Lint
+        run: ./gradlew lint
+
+      - name: Fail on Kotlin warnings
+        run: |
+          ./gradlew clean
+          ./gradlew :drawably:assembleDebug :showcase:assembleDebug 2>&1 | tee build.log
+          if grep -q "^w:" build.log; then
+            echo "::error::the build emitted warnings"
+            grep "^w:" build.log
+            exit 1
+          fi
+
+      - name: Keep the reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: reports
+          path: |
+            drawably/build/reports/
+            showcase/build/reports/
+          if-no-files-found: ignore

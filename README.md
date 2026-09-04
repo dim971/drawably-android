@@ -1,27 +1,81 @@
+<div align="center">
+
 # Drawably for Jetpack Compose
 
-A Compose port of [Drawably](https://www.drawably.dev) — hand-drawn UI controls
-that sketch themselves fresh on every composition, boil gently while idle, and
-re-sketch when you touch them.
+**Hand-drawn UI controls that sketch themselves fresh on every composition,
+boil gently while idle, and re-sketch when you touch them.**
+
+[![CI](https://github.com/dim971/drawably-android/actions/workflows/ci.yml/badge.svg)](https://github.com/dim971/drawably-android/actions/workflows/ci.yml)
+[![Kotlin](https://img.shields.io/badge/Kotlin-2.4-blueviolet.svg)](https://kotlinlang.org)
+[![API](https://img.shields.io/badge/minSdk-24-brightgreen.svg)](#requirements)
+[![Compose](https://img.shields.io/badge/Jetpack%20Compose-Foundation-4285F4.svg)](#requirements)
+[![Licence](https://img.shields.io/badge/licence-MIT-blue.svg)](LICENSE)
+
+<img src="docs/images/hero.png" width="380" alt="Buttons, checkboxes, a switch, a text field, a select, badges, a checklist and text decorations, all drawn as pen sketches">
+
+</div>
+
+A Jetpack Compose port of [**Drawably**](https://www.drawably.dev) by Daniel
+Belyi ([source](https://github.com/Danilaa1/drawably), MIT). The stroke engine is
+a direct port of the original's, checked against fixtures generated from the
+published npm package — see [Fidelity](#fidelity).
 
 ```kotlin
-DrawablyTheme {
-    DrawablyButton("Done", onClick = ::submit, variant = DrawablyButtonVariant.Solid)
-}
+DrawablyButton("Done", onClick = ::submit, variant = DrawablyButtonVariant.Solid)
 ```
+
+## Contents
+
+- [Requirements](#requirements)
+- [Installation](#installation)
+- [Quick start](#quick-start)
+- [Components](#components)
+- [Theming](#theming)
+- [Motion and accessibility](#motion-and-accessibility)
+- [Fidelity](#fidelity)
+- [Showcase app](#showcase-app)
+- [Documentation](#documentation)
+- [Contributing](#contributing)
+- [Licence](#licence)
 
 ## Requirements
 
-minSdk 24, compileSdk 37, JDK 17 bytecode. The build declares its own daemon JVM
-criteria (`gradle/gradle-daemon-jvm.properties`), so Gradle picks a JDK 21
-itself — there is no `JAVA_HOME` to set.
+minSdk 24, compileSdk 37, JDK 17 bytecode.
 
-AGP is pinned to 9.2.1 rather than the newest release: Android Studio refuses to
-sync a project built with an AGP newer than it supports, even though the command
-line is happy with it. Raise it when the IDE does.
+The library sits on **Compose Foundation, not Material**, so it drops into any
+Compose app whatever design system it already uses, and brings nothing else with
+it.
 
-The library depends on Compose Foundation, not Material, so it drops into any
-Compose app whatever design system it already uses.
+## Installation
+
+```kotlin
+dependencies {
+    implementation("dev.drawably:drawably-compose:0.1.0")
+}
+```
+
+```kotlin
+import dev.drawably.compose.components.*
+import dev.drawably.compose.theme.DrawablyTheme
+```
+
+## Quick start
+
+```kotlin
+@Composable
+fun Example() {
+    var agreed by remember { mutableStateOf(false) }
+    var name by remember { mutableStateOf("") }
+
+    DrawablyTheme {
+        Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+            DrawablyTextField(name, { name = it }, placeholder = "your name")
+            DrawablyCheckbox(agreed, { agreed = it }) { Text("Ship it") }
+            DrawablyButton("Done", ::submit, variant = DrawablyButtonVariant.Solid)
+        }
+    }
+}
+```
 
 ## Components
 
@@ -36,22 +90,21 @@ All fifteen upstream controls, with upstream's defaults.
 | `DrawablySwitch` | A pill with an ink blob that slides across it. |
 | `DrawablyTextField` | One line of text in a sketched box. |
 | `DrawablyTextArea` | Several lines of it. |
-| `DrawablySelect` | A pen chevron opening a sketched list, tailed back to the field — no platform chrome around it. The box is pre-sized to the widest option so picking never shifts the layout. |
+| `DrawablySelect` | A pen chevron opening a sketched list, tailed back to the field — no platform chrome around it. Pre-sized to the widest option so picking never shifts the layout. |
 | `DrawablyDivider` | A pen line across the available width. |
 | `DrawablyBadge` | A small sharp-cornered tag. `Outline` or `Scribble`. |
 | `DrawablyList` | Bullets drawn in the gutter. `Dash` or `Check`. |
 | `DrawablyDecoratedText` | `Underline`, `Highlight` or `Circle`, one mark per line the text wraps onto. |
 | `Modifier.drawablyUnderline()` / `drawablyHighlight()` / `drawablyCircle()` | The same marks as a single box, for anything that is not text. |
-| `DrawablyArrowLayer` | A sketched arrow between two named anchors. |
+| `DrawablyArrowLayer` + `Modifier.drawablyAnchor()` | A sketched arrow between two named anchors. |
 | `Modifier.drawablyTilt()` | Leans a control a couple of degrees, so a group looks laid out by hand. Seeded, so it is stable — and the same seed leans the same way on iOS. |
 
-Every control wraps a real Foundation control — `toggleable`, `selectable`,
-`BasicTextField` — so TalkBack, focus and keyboard all behave as they would
-without the sketch, which is drawn behind them and carries no semantics.
+Full reference: [docs/components.md](docs/components.md).
 
 ## Theming
 
-`DrawablyTheme` mirrors upstream's CSS custom properties, defaults included:
+`DrawablyTheme` mirrors upstream's CSS custom properties, defaults included, and
+travels through a `CompositionLocal` the way they cascade.
 
 | Property | Default | What it does |
 | --- | --- | --- |
@@ -63,88 +116,70 @@ without the sketch, which is drawn behind them and carries no semantics.
 | `roughness` | `1.0` | Jitter amplitude of the base sketch |
 | `boil` | `0.3` | Per-frame flicker amplitude; `0` renders a still sketch |
 
-```kotlin
-DrawablyTheme(DrawablyTheme(stroke = Color.Black, fill = Color.Black, roughness = 1.6)) {
-    // everything below draws in a thicker, wobblier black pen
-}
-```
+More in [docs/theming.md](docs/theming.md).
 
-Pass `seed` to any control to pin its sketch — useful in previews and
-screenshot tests. Unpinned, a control picks a fresh seed on first composition
-and rolls another whenever it is pressed or hovered.
-
-## Motion
+## Motion and accessibility
 
 Upstream boils by stepping a CSS custom property through three pre-rendered
 frames every 1200ms, and speeds that up to 450ms while a button is loading. The
-same thing happens here on a ticker: three frames are generated once per box
-size, seed and options, and the draw pass only picks which one to stroke.
+same happens here on a ticker: three frames are generated once per box size,
+seed and options, and the draw pass only picks which one to stroke.
 
 Turning animations off — developer options, or accessibility settings — zeroes
-`ANIMATOR_DURATION_SCALE`, which stops the boil and the re-sketch entirely, the
-same way `prefers-reduced-motion` does upstream.
+`ANIMATOR_DURATION_SCALE`, which stops the boil and the re-sketch, the same way
+`prefers-reduced-motion` does upstream.
+
+Every control wraps a real Foundation control — `toggleable`, `selectable`,
+`BasicTextField` — so TalkBack, focus and keyboard behave as they would without
+the sketch, which is drawn behind and carries no semantics.
 
 ## Fidelity
 
-Every shape this library draws is generated by a direct port of upstream's
-`prng.ts` and `rough.ts`. `:drawably`'s unit tests replay fixtures produced by
-the published npm package and assert the ported engine emits **byte-identical**
-path data — the same PRNG stream, the same sample counts, the same boil frames,
-for all 26 control layers.
+Every shape is generated by a direct port of upstream's `prng.ts` and
+`rough.ts`. The unit tests replay fixtures produced by the published npm package
+and assert the ported engine emits **byte-identical** path data — the same PRNG
+stream, the same sample counts, the same boil frames, for all 26 control layers.
 
-Getting there needed three deliberate reconciliations:
+Getting there needed three deliberate JVM/JavaScript reconciliations, all
+explained in [docs/fidelity.md](docs/fidelity.md).
 
-- **Trigonometry** (`core/JsMath.kt`). V8 implements `cos`, `sin` and `atan2`
-  with fdlibm, as does `StrictMath`; `java.lang.Math` uses intrinsics that
-  differ in the last ulp. That is invisible in a rounded coordinate but decides
-  `ceil(length / step)`, and an arrow head is exactly 12 long sampled every 4 —
-  one extra sample point shifts every later PRNG draw.
-- **`Math.hypot`** (same file). V8 scales by the larger component and takes the
-  square root before multiplying back; `java.lang.Math.hypot` is more accurate,
-  which here means different.
-- **Number formatting** (`core/SvgPath.kt`). `Number.prototype.toFixed(2)`
-  rounds exact halves away from zero; `"%.2f"` rounds them to even. `0.125` is
-  `0.13` upstream and would be `0.12` here.
+## Showcase app
 
-Geometry is also generated in density-independent units and the canvas scaled to
-pixels around it. Roughness is an absolute amplitude, so generating against a
-pixel size makes the jitter three times finer on a 3x screen than on the web.
+A catalog app listing every component with a live preview, a screen per
+component showing its variants with copyable code, and pen controls on every
+screen so you can feel roughness, boil, width and ink.
 
-Regenerate the fixtures against a new upstream version with:
+<p align="center">
+  <img src="docs/images/catalog.png" width="250" alt="Catalog listing every component with a live preview">
+  <img src="docs/images/component.png" width="250" alt="A component screen showing variants with their code">
+</p>
 
 ```sh
-cd Tools && npm i drawably@0.3.10 && node gen-goldens.mjs > ../drawably/src/test/resources/goldens.json
+./gradlew :showcase:installDebug
 ```
 
-## Modules
+In Android Studio, open the project and pick the **showcase** run configuration —
+it is checked in, so the app is launchable straight after cloning.
 
-| Module | What it is |
+## Documentation
+
+| Document | What it covers |
 | --- | --- |
-| `:drawably` | the library (`dev.drawably.compose`) |
-| `:showcase` | a catalog app demonstrating every component |
+| [Getting started](docs/getting-started.md) | Installing, the first control, common patterns |
+| [Components](docs/components.md) | Every component, its parameters and its behaviour |
+| [Theming](docs/theming.md) | The theme, seeds, and drawing your own shapes |
+| [Fidelity](docs/fidelity.md) | How the port is verified against the original |
+| [Architecture](docs/architecture.md) | How a sketch gets from the engine to the screen |
 
-```sh
-./gradlew :drawably:testDebugUnitTest   # engine goldens
-./gradlew :showcase:installDebug        # the catalog app
-./gradlew lint
-```
+## Contributing
 
-In Android Studio, open the project and pick the **showcase** run
-configuration — it is checked in under `.idea/runConfigurations/`, along with a
-Gradle-task fallback, so the app is launchable straight after cloning.
-
-Publishing to Maven Central is configured with the vanniktech plugin but has
-never been run; it needs credentials and a signing key this repository does not
-carry.
-
-## Icon
-
-The showcase's launcher icon is a lowercase "d" drawn by the library's own
-stroke engine — the same `roughCircle` and `roughLine` a button's border uses,
-at a pinned seed. Regenerate it with `node Tools/gen-icon.mjs emit`; the sizing
-accounts for the adaptive icon's 66dp safe circle, including the stroke width
-and the jitter, so a round launcher mask does not clip the ascender.
+Issues and pull requests are welcome — see [CONTRIBUTING.md](CONTRIBUTING.md)
+for how to build, test and what the review looks for. Everyone taking part is
+expected to follow the [Code of Conduct](CODE_OF_CONDUCT.md).
 
 ## Licence
 
-MIT. Upstream Drawably is © 2026 Daniel Belyi, MIT licensed — see `NOTICE`.
+MIT — see [LICENSE](LICENSE).
+
+Upstream Drawably is © 2026 Daniel Belyi, also MIT. This port carries its own
+[NOTICE](NOTICE) crediting it.

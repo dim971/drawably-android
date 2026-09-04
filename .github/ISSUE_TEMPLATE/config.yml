@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Upstream Drawably
+    url: https://github.com/Danilaa1/drawably
+    about: For the original web library this is a port of.
+  - name: Drawably for SwiftUI
+    url: https://github.com/dim971/drawably-ios
+    about: The iOS twin of this library.
