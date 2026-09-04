@@ -2,8 +2,11 @@
 
 # Drawably for Jetpack Compose
 
-**Hand-drawn UI controls that sketch themselves fresh on every composition,
-boil gently while idle, and re-sketch when you touch them.**
+**A Jetpack Compose port of [Drawably](https://www.drawably.dev), the hand-drawn
+UI library by [Daniel Belyi](https://github.com/Danilaa1) — MIT licensed.**
+
+Controls that sketch themselves fresh on every composition, boil gently while
+idle, and re-sketch when you touch them.
 
 [![CI](https://github.com/dim971/drawably-android/actions/workflows/ci.yml/badge.svg)](https://github.com/dim971/drawably-android/actions/workflows/ci.yml)
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.4-blueviolet.svg)](https://kotlinlang.org)
@@ -15,10 +18,11 @@ boil gently while idle, and re-sketch when you touch them.**
 
 </div>
 
-A Jetpack Compose port of [**Drawably**](https://www.drawably.dev) by Daniel
-Belyi ([source](https://github.com/Danilaa1/drawably), MIT). The stroke engine is
-a direct port of the original's, checked against fixtures generated from the
-published npm package — see [Fidelity](#fidelity).
+The design, the stroke engine and every control here are Daniel Belyi's work.
+This repository ports them to Jetpack Compose: the engine is a direct
+transcription of [`prng.ts` and `rough.ts`](https://github.com/Danilaa1/drawably),
+checked against fixtures generated from the published npm package so that it
+emits byte-identical geometry — see [Fidelity](#fidelity).
 
 ```kotlin
 DrawablyButton("Done", onClick = ::submit, variant = DrawablyButtonVariant.Solid)
@@ -36,6 +40,7 @@ DrawablyButton("Done", onClick = ::submit, variant = DrawablyButtonVariant.Solid
 - [Showcase app](#showcase-app)
 - [Documentation](#documentation)
 - [Contributing](#contributing)
+- [Credits](#credits)
 - [Licence](#licence)
 
 ## Requirements
@@ -182,9 +187,17 @@ Issues and pull requests are welcome — see [CONTRIBUTING.md](CONTRIBUTING.md)
 for how to build, test and what the review looks for. Everyone taking part is
 expected to follow the [Code of Conduct](CODE_OF_CONDUCT.md).
 
+## Credits
+
+**[Drawably](https://www.drawably.dev) is by [Daniel Belyi](https://github.com/Danilaa1)**
+— the idea, the stroke engine, the components and the look are his.
+[`Danilaa1/drawably`](https://github.com/Danilaa1/drawably) is the original, and
+worth reading: the whole renderer is 166 lines.
+
+This repository is a port. It contributes a Kotlin transcription, the fixtures
+that keep it honest, and the Compose plumbing around it.
+
 ## Licence
 
-MIT — see [LICENSE](LICENSE).
-
-Upstream Drawably is © 2026 Daniel Belyi, also MIT. This port carries its own
-[NOTICE](NOTICE) crediting it.
+MIT — see [LICENSE](LICENSE). Upstream Drawably is © 2026 Daniel Belyi, also
+MIT; [NOTICE](NOTICE) records the attribution in full.
