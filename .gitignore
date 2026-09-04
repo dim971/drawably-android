@@ -2,7 +2,10 @@
 .gradle/
 build/
 local.properties
-.idea/
+.idea/*
+# the showcase run configurations are checked in so the app is launchable
+# straight after cloning
+!.idea/runConfigurations/
 *.iml
 captures/
 .kotlin/

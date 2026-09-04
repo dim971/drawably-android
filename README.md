@@ -12,12 +12,13 @@ DrawablyTheme {
 
 ## Requirements
 
-minSdk 24, compileSdk 37, JDK 17 bytecode. Build with JDK 21 — Android Studio's
-bundled runtime works:
+minSdk 24, compileSdk 37, JDK 17 bytecode. The build declares its own daemon JVM
+criteria (`gradle/gradle-daemon-jvm.properties`), so Gradle picks a JDK 21
+itself — there is no `JAVA_HOME` to set.
 
-```sh
-export JAVA_HOME="/Applications/Android Studio.app/Contents/jbr/Contents/Home"
-```
+AGP is pinned to 9.2.1 rather than the newest release: Android Studio refuses to
+sync a project built with an AGP newer than it supports, even though the command
+line is happy with it. Raise it when the IDE does.
 
 The library depends on Compose Foundation, not Material, so it drops into any
 Compose app whatever design system it already uses.
@@ -126,6 +127,10 @@ cd Tools && npm i drawably@0.3.10 && node gen-goldens.mjs > ../drawably/src/test
 ./gradlew :showcase:installDebug        # the catalog app
 ./gradlew lint
 ```
+
+In Android Studio, open the project and pick the **showcase** run
+configuration — it is checked in under `.idea/runConfigurations/`, along with a
+Gradle-task fallback, so the app is launchable straight after cloning.
 
 Publishing to Maven Central is configured with the vanniktech plugin but has
 never been run; it needs credentials and a signing key this repository does not
