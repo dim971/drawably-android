@@ -136,6 +136,14 @@ Publishing to Maven Central is configured with the vanniktech plugin but has
 never been run; it needs credentials and a signing key this repository does not
 carry.
 
+## Icon
+
+The showcase's launcher icon is a lowercase "d" drawn by the library's own
+stroke engine — the same `roughCircle` and `roughLine` a button's border uses,
+at a pinned seed. Regenerate it with `node Tools/gen-icon.mjs emit`; the sizing
+accounts for the adaptive icon's 66dp safe circle, including the stroke width
+and the jitter, so a round launcher mask does not clip the ascender.
+
 ## Licence
 
 MIT. Upstream Drawably is © 2026 Daniel Belyi, MIT licensed — see `NOTICE`.

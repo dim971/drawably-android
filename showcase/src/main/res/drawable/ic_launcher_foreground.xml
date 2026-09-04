@@ -1,19 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- A pen loop, drawn the way the library draws a circle decoration. -->
+<!--
+  A lowercase "d" sketched by the library's own stroke engine — the same
+  roughCircle and roughLine a button's border is drawn with, at seed 19. Sized
+  to sit inside the adaptive icon's 66dp safe circle once the stroke width and
+  the jitter are accounted for, so a round launcher mask does not clip the
+  ascender. Regenerate with Tools/gen-icon.mjs; do not edit the path data.
+-->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp"
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
     <path
-        android:pathData="M32,44 Q30,32 46,29 Q64,26 76,34 Q86,41 80,54 Q74,67 56,70 Q38,73 32,62 Q28,54 34,47"
-        android:strokeColor="#FFFFFF"
-        android:strokeWidth="5"
+        android:pathData="M66.64 62.14Q66.16 70.81 64.52 72.63Q62.88 74.45 58.72 75.78Q54.56 77.11 50.77 76.69Q46.99 76.26 43.63 73.05Q40.27 69.84 40.16 66.11Q40.04 62.39 40.99 58.27Q41.95 54.14 43.68 52.29Q45.42 50.44 50.10 50.09Q54.77 49.73 57.89 49.53Q61.00 49.33 62.90 51.84L64.80 54.34ZM68.79 61.68Q64.63 71.81 62.30 74.62Q59.96 77.43 58.10 77.15Q56.24 76.87 50.69 75.39Q45.13 73.90 44.46 72.81Q43.79 71.73 40.51 66.76Q37.24 61.80 40.55 59.83Q43.87 57.86 45.36 53.87Q46.85 49.88 49.66 48.68Q52.47 47.47 57.68 47.85Q62.88 48.23 64.30 51.96L65.71 55.69Z"
+        android:fillColor="#00000000"
+        android:strokeColor="#2724D1"
+        android:strokeWidth="5.48"
         android:strokeLineCap="round"
         android:strokeLineJoin="round" />
     <path
-        android:pathData="M42,78 Q56,81 72,77"
-        android:strokeColor="#FFFFFF"
-        android:strokeWidth="4"
-        android:strokeLineCap="round" />
+        android:pathData="M69.15 30.58Q68.59 37.90 68.28 41.56Q67.98 45.22 68.52 50.26Q69.06 55.29 68.50 59.31Q67.93 63.33 67.63 65.73Q67.32 68.12 67.38 72.67L67.44 77.21M66.80 29.53Q70.61 37.71 68.53 41.58Q66.45 45.45 66.34 49.24Q66.22 53.04 66.92 58.41Q67.61 63.78 69.01 67.57Q70.40 71.35 70.47 73.68L70.55 76.01"
+        android:fillColor="#00000000"
+        android:strokeColor="#2724D1"
+        android:strokeWidth="5.48"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
 </vector>
