@@ -45,8 +45,12 @@ public class SketchLayer(
     public val offsetX: () -> Float = { 0f },
     /** Scale about the centre, for the radio's dot. */
     public val scale: () -> Float = { 1f },
-    /** Paints the inside of a normally unfilled layer, as a hover wash does. */
-    public val fill: Color? = null,
+    /**
+     * Paints the inside of a normally unfilled layer, as a press or hover wash
+     * does. A lambda like the rest, so touching a control redraws it rather
+     * than regenerating its geometry.
+     */
+    public val fill: () -> Color? = { null },
     public val generate: (Size, RoughOptions) -> SketchPath,
 )
 
@@ -171,8 +175,8 @@ private fun DrawScope.drawLayer(
     }) {
         if (layer.role.isFilled) {
             drawPath(path, color, alpha = layer.role.opacity, style = Fill, blendMode = layer.role.blendMode)
-        } else if (layer.fill != null) {
-            drawPath(path, layer.fill, style = Fill)
+        } else {
+            layer.fill()?.let { drawPath(path, it, style = Fill) }
         }
         drawPath(
             path = if (trim >= 1f) path else path.trimmed(trim),

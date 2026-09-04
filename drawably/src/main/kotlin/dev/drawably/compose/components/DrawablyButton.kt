@@ -130,11 +130,21 @@ public fun DrawablyButton(
     )
 
     val labelColor = ink ?: if (variant == DrawablyButtonVariant.Solid) theme.paper else theme.stroke
-    // hover washes the inside with 10% ink, except under a solid fill where
-    // there would be nothing to see
-    val wash = isHovered && clickable && variant != DrawablyButtonVariant.Solid
-    val layers = remember(variant, wash, labelColor) {
-        buildButtonLayers(variant, if (wash) labelColor.copy(alpha = 0.1f) else null) { focused.value }
+
+    val wash: () -> Color? = {
+        drawablyButtonWash(
+            ink = labelColor,
+            variant = variant,
+            enabled = clickable,
+            pressed = isPressed,
+            hovered = isHovered,
+        )
+    }
+    // Only the variant changes which shapes exist; press, hover and focus change
+    // how they are painted, which is a redraw rather than a regeneration. The
+    // ink is a key because the wash lambda closes over it.
+    val layers = remember(variant, labelColor, clickable) {
+        buildButtonLayers(variant, wash) { focused.value }
     }
 
     val density = LocalDensity.current
@@ -198,7 +208,7 @@ private fun buttonAlpha(enabled: Boolean, state: DrawablyButtonState): Float = w
 
 private fun buildButtonLayers(
     variant: DrawablyButtonVariant,
-    wash: Color?,
+    wash: () -> Color?,
     focused: () -> Boolean,
 ): List<SketchLayer> = buildList {
     if (variant == DrawablyButtonVariant.Solid) {
@@ -244,4 +254,36 @@ public fun DrawablyButton(
     ) {
         DrawablyText(text)
     }
+}
+
+/** How much ink a button washes its inside with. */
+public object DrawablyButtonWash {
+    /** Upstream's hover wash. */
+    public const val HOVER: Float = 0.1f
+
+    /**
+     * A press gets a stronger one — and gets it on touch devices, where hover
+     * never happens and the sink-and-thicken alone is easy to miss under a
+     * fingertip.
+     */
+    public const val PRESSED: Float = 0.18f
+}
+
+/**
+ * The wash painted inside a button's outline, or `null` for none.
+ *
+ * A solid button is already filled, so there would be nothing to see; a
+ * disabled one does not react at all.
+ */
+public fun drawablyButtonWash(
+    ink: Color,
+    variant: DrawablyButtonVariant,
+    enabled: Boolean,
+    pressed: Boolean,
+    hovered: Boolean,
+): Color? = when {
+    !enabled || variant == DrawablyButtonVariant.Solid -> null
+    pressed -> ink.copy(alpha = DrawablyButtonWash.PRESSED)
+    hovered -> ink.copy(alpha = DrawablyButtonWash.HOVER)
+    else -> null
 }
