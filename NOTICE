@@ -1,0 +1,16 @@
+Drawably for Jetpack Compose
+============================
+
+This library is a native Jetpack Compose port of Drawably, a hand-drawn UI
+control library for the web.
+
+    Drawably — https://www.drawably.dev
+    https://github.com/Danilaa1/drawably
+    Copyright (c) 2026 Daniel Belyi
+    Licensed under the MIT License
+
+The stroke-generation engine (dev.drawably.compose.core) is a direct port of
+Drawably's `src/prng.ts` and `src/rough.ts`, and the layer geometry in
+dev.drawably.compose.sketch follows `src/controls.ts`. Test fixtures under
+drawably/src/test/resources are generated from the published npm package so this
+port can be verified against upstream output.
