@@ -8,7 +8,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -24,7 +26,14 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.IntRect
+import androidx.compose.ui.unit.IntSize
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.window.Popup
+import androidx.compose.ui.window.PopupPositionProvider
+import androidx.compose.ui.window.PopupProperties
 import dev.drawably.compose.sketch.DrawablyGeometry
 import dev.drawably.compose.sketch.SketchLayer
 import dev.drawably.compose.sketch.SketchRole
@@ -95,7 +104,15 @@ public fun <T> DrawablySelect(
         }
 
         if (isOpen) {
-            Popup(onDismissRequest = { isOpen = false }) {
+            // The platform popup draws no chrome of its own, but it does decide
+            // where to sit; this pins it just below the field so the drawn tail
+            // always points at something.
+            val gap = with(LocalDensity.current) { 2.dp.roundToPx() }
+            Popup(
+                popupPositionProvider = remember(gap) { BelowAnchor(gap) },
+                onDismissRequest = { isOpen = false },
+                properties = PopupProperties(focusable = true),
+            ) {
                 DrawablySelectOptions(
                     options = options,
                     selected = selected,
@@ -126,16 +143,25 @@ private fun <T> DrawablySelectOptions(
     val frameLayers = remember {
         listOf(
             SketchLayer(SketchRole.Outline) { size, o ->
-                DrawablyGeometry.fieldOutline(size.width.toDouble(), size.height.toDouble(), o)
+                DrawablyGeometry.popupFrame(size.width.toDouble(), size.height.toDouble(), o)
+            },
+            SketchLayer(SketchRole.Outline) { size, o ->
+                DrawablyGeometry.popupTail(size.width.toDouble(), size.height.toDouble(), o)
             },
         )
     }
     Column(
         verticalArrangement = Arrangement.spacedBy(4.dp),
         modifier = Modifier
+            // hug the widest option instead of filling the window, so the list
+            // is the size iOS's is
+            .width(IntrinsicSize.Max)
+            // paper first, so the frame and its tail are drawn over it
             .drawBehind { drawRect(state.theme.paper) }
             .drawablySketch(state, frameLayers)
-            .padding(6.dp),
+            .padding(6.dp)
+            // room at the top for the tail, which is drawn inside the box
+            .padding(top = DrawablyGeometry.POPUP_TAIL_HEIGHT.dp),
     ) {
         options.forEachIndexed { index, option ->
             val tickLayers = remember(option == selected) {
@@ -168,4 +194,14 @@ private fun <T> DrawablySelectOptions(
             }
         }
     }
+}
+
+/** Puts a popup immediately below its anchor, aligned to its leading edge. */
+private class BelowAnchor(private val gap: Int) : PopupPositionProvider {
+    override fun calculatePosition(
+        anchorBounds: IntRect,
+        windowSize: IntSize,
+        layoutDirection: LayoutDirection,
+        popupContentSize: IntSize,
+    ): IntOffset = IntOffset(anchorBounds.left, anchorBounds.bottom + gap)
 }

@@ -147,6 +147,41 @@ public object DrawablyGeometry {
 
     // endregion
 
+    /**
+     * How tall the tail is. The popup reserves this much at its top, so the
+     * tail is drawn inside the box rather than hanging outside it.
+     */
+    public const val POPUP_TAIL_HEIGHT: Double = 10.0
+    public const val POPUP_TAIL_WIDTH: Double = 18.0
+
+    /** How far the tail sits from the popup's leading edge. */
+    public const val POPUP_TAIL_INSET: Double = 14.0
+
+    /** The popup's frame, which starts below the space the tail occupies. */
+    public fun popupFrame(w: Double, h: Double, o: RoughOptions): SketchPath = Rough.roundedRect(
+        INSET,
+        INSET + POPUP_TAIL_HEIGHT,
+        w - 2 * INSET,
+        h - 2 * INSET - POPUP_TAIL_HEIGHT,
+        6.0,
+        o,
+    )
+
+    /**
+     * A pen tail on the popup's top edge, pointing back at the control it
+     * belongs to. Two strokes meeting at a point, drawn the way an arrow head
+     * is — without it the popup floats unattached, since it carries none of the
+     * platform's own chrome.
+     */
+    @Suppress("UNUSED_PARAMETER")
+    public fun popupTail(w: Double, h: Double, o: RoughOptions): SketchPath {
+        val left = min(INSET + POPUP_TAIL_INSET, w - INSET - POPUP_TAIL_WIDTH)
+        val apexX = left + POPUP_TAIL_WIDTH / 2
+        val baseY = INSET + POPUP_TAIL_HEIGHT
+        return Rough.line(left, baseY, apexX, INSET, o) +
+            Rough.line(apexX, INSET, left + POPUP_TAIL_WIDTH, baseY, o.copy(seed = o.seed + 1u))
+    }
+
     // region Badge
 
     public fun badgeOutline(w: Double, h: Double, o: RoughOptions): SketchPath =

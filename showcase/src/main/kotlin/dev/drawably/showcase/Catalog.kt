@@ -213,7 +213,7 @@ val catalog: List<CatalogEntry> = listOf(
     ),
     CatalogEntry(
         name = "Select",
-        summary = "A select with a pen chevron, opening a sketched popup.",
+        summary = "A pen chevron, opening a sketched list tailed back to the field.",
         preview = { SelectPreview() },
         demos = listOf(
             Demo(
