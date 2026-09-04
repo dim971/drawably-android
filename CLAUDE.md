@@ -64,7 +64,9 @@ Tools/          gen-goldens.mjs, gen-icon.mjs — Node, run by hand
 - **AGP is pinned to what Android Studio can sync**, not the newest release. A
   failed sync means no run configuration at all, and the showcase becomes
   unlaunchable from the IDE.
-- Explicit API mode is on.
+- Explicit API mode is on. `docs/coding-style.md` is the style contract; ktlint
+  enforces the mechanical half. If explicit API mode complains, write the type,
+  do not relax the mode.
 - Comments explain why, not what.
 
 ## Verifying

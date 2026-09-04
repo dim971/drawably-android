@@ -18,14 +18,15 @@ internal fun jsToFixed2(value: Double): String {
     if (magnitude.isInfinite()) return if (negative) "-Infinity" else "Infinity"
 
     val halves = magnitude * 200
-    val n = if (halves == floor(halves) && halves.mod(2.0) == 1.0) {
-        // exactly .xx5: ECMAScript takes the larger candidate
-        (halves + 1) / 2
-    } else {
-        val scaled = magnitude * 100
-        val down = floor(scaled)
-        if (scaled - down >= 0.5) down + 1 else down
-    }
+    val n =
+        if (halves == floor(halves) && halves.mod(2.0) == 1.0) {
+            // exactly .xx5: ECMAScript takes the larger candidate
+            (halves + 1) / 2
+        } else {
+            val scaled = magnitude * 100
+            val down = floor(scaled)
+            if (scaled - down >= 0.5) down + 1 else down
+        }
 
     val digits = n.toLong().toString().padStart(3, '0')
     val text = digits.dropLast(2) + "." + digits.takeLast(2)

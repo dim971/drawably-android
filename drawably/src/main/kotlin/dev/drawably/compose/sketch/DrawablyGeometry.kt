@@ -1,5 +1,8 @@
 package dev.drawably.compose.sketch
 
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import dev.drawably.compose.core.Rough
 import dev.drawably.compose.core.RoughOptions
 import dev.drawably.compose.core.SketchPath
@@ -9,9 +12,6 @@ import dev.drawably.compose.core.ellipse
 import dev.drawably.compose.core.line
 import dev.drawably.compose.core.roundedRect
 import dev.drawably.compose.core.scribbleFill
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import kotlin.math.min
 
 /**
@@ -30,92 +30,154 @@ public object DrawablyGeometry {
 
     // region Shared rectangles
 
-    public fun outlineRect(radius: Double, w: Double, h: Double, o: RoughOptions): SketchPath =
-        Rough.roundedRect(INSET, INSET, w - 2 * INSET, h - 2 * INSET, radius, o)
+    public fun outlineRect(
+        radius: Double,
+        w: Double,
+        h: Double,
+        o: RoughOptions,
+    ): SketchPath = Rough.roundedRect(INSET, INSET, w - 2 * INSET, h - 2 * INSET, radius, o)
 
     /** The focus ring sits just *outside* the box, unlike every other layer. */
-    public fun focusRect(radius: Double, w: Double, h: Double, o: RoughOptions): SketchPath =
-        Rough.roundedRect(-1.0, -1.0, w + 2, h + 2, radius, o)
+    public fun focusRect(
+        radius: Double,
+        w: Double,
+        h: Double,
+        o: RoughOptions,
+    ): SketchPath = Rough.roundedRect(-1.0, -1.0, w + 2, h + 2, radius, o)
 
     // endregion
 
     // region Button
 
-    public fun buttonOutline(w: Double, h: Double, o: RoughOptions): SketchPath =
-        outlineRect(8.0, w, h, o)
+    public fun buttonOutline(
+        w: Double,
+        h: Double,
+        o: RoughOptions,
+    ): SketchPath = outlineRect(8.0, w, h, o)
 
     /**
      * The `solid` variant's ink blob uses the same shape as the outline; only its
      * paint differs.
      */
-    public fun buttonBlob(w: Double, h: Double, o: RoughOptions): SketchPath =
-        outlineRect(8.0, w, h, o)
+    public fun buttonBlob(
+        w: Double,
+        h: Double,
+        o: RoughOptions,
+    ): SketchPath = outlineRect(8.0, w, h, o)
 
-    public fun buttonScribble(w: Double, h: Double, o: RoughOptions): SketchPath =
-        Rough.scribbleFill(INSET + 2, INSET + 2, w - 2 * INSET - 4, h - 2 * INSET - 4, o)
+    public fun buttonScribble(
+        w: Double,
+        h: Double,
+        o: RoughOptions,
+    ): SketchPath = Rough.scribbleFill(INSET + 2, INSET + 2, w - 2 * INSET - 4, h - 2 * INSET - 4, o)
 
-    public fun buttonFocus(w: Double, h: Double, o: RoughOptions): SketchPath =
-        focusRect(10.0, w, h, o)
+    public fun buttonFocus(
+        w: Double,
+        h: Double,
+        o: RoughOptions,
+    ): SketchPath = focusRect(10.0, w, h, o)
 
     // endregion
 
-    public fun cardOutline(w: Double, h: Double, o: RoughOptions): SketchPath =
-        outlineRect(10.0, w, h, o)
+    public fun cardOutline(
+        w: Double,
+        h: Double,
+        o: RoughOptions,
+    ): SketchPath = outlineRect(10.0, w, h, o)
 
     // region Checkbox
 
-    public fun checkboxOutline(w: Double, h: Double, o: RoughOptions): SketchPath =
-        outlineRect(5.0, w, h, o)
+    public fun checkboxOutline(
+        w: Double,
+        h: Double,
+        o: RoughOptions,
+    ): SketchPath = outlineRect(5.0, w, h, o)
 
-    public fun checkboxCheck(w: Double, h: Double, o: RoughOptions): SketchPath =
-        Rough.checkmark(w * 0.24, h * 0.2, w * 0.52, h * 0.5, o)
+    public fun checkboxCheck(
+        w: Double,
+        h: Double,
+        o: RoughOptions,
+    ): SketchPath = Rough.checkmark(w * 0.24, h * 0.2, w * 0.52, h * 0.5, o)
 
-    public fun checkboxFocus(w: Double, h: Double, o: RoughOptions): SketchPath =
-        focusRect(7.0, w, h, o)
+    public fun checkboxFocus(
+        w: Double,
+        h: Double,
+        o: RoughOptions,
+    ): SketchPath = focusRect(7.0, w, h, o)
 
     // endregion
 
     // region Radio
 
-    public fun radioOutline(w: Double, h: Double, o: RoughOptions): SketchPath =
-        Rough.circle(w / 2, h / 2, min(w, h) / 2 - INSET, o)
+    public fun radioOutline(
+        w: Double,
+        h: Double,
+        o: RoughOptions,
+    ): SketchPath = Rough.circle(w / 2, h / 2, min(w, h) / 2 - INSET, o)
 
-    public fun radioDot(w: Double, h: Double, o: RoughOptions): SketchPath =
-        Rough.circle(w / 2, h / 2, min(w, h) * 0.18, o)
+    public fun radioDot(
+        w: Double,
+        h: Double,
+        o: RoughOptions,
+    ): SketchPath = Rough.circle(w / 2, h / 2, min(w, h) * 0.18, o)
 
-    public fun radioFocus(w: Double, h: Double, o: RoughOptions): SketchPath =
-        Rough.circle(w / 2, h / 2, min(w, h) / 2 + 1, o)
+    public fun radioFocus(
+        w: Double,
+        h: Double,
+        o: RoughOptions,
+    ): SketchPath = Rough.circle(w / 2, h / 2, min(w, h) / 2 + 1, o)
 
     // endregion
 
     // region Toggle
 
     /** A pill: the corner radius is whatever makes the ends semicircular. */
-    public fun toggleOutline(w: Double, h: Double, o: RoughOptions): SketchPath =
-        outlineRect((h - 2 * INSET) / 2, w, h, o)
+    public fun toggleOutline(
+        w: Double,
+        h: Double,
+        o: RoughOptions,
+    ): SketchPath = outlineRect((h - 2 * INSET) / 2, w, h, o)
 
     @Suppress("UNUSED_PARAMETER")
-    public fun toggleKnob(w: Double, h: Double, o: RoughOptions): SketchPath =
-        Rough.circle(h / 2, h / 2, h / 2 - INSET - 3, o)
+    public fun toggleKnob(
+        w: Double,
+        h: Double,
+        o: RoughOptions,
+    ): SketchPath = Rough.circle(h / 2, h / 2, h / 2 - INSET - 3, o)
 
-    public fun toggleFocus(w: Double, h: Double, o: RoughOptions): SketchPath =
-        focusRect(12.0, w, h, o)
+    public fun toggleFocus(
+        w: Double,
+        h: Double,
+        o: RoughOptions,
+    ): SketchPath = focusRect(12.0, w, h, o)
 
     /** How far the knob slides, for the default 44×24 pill. */
-    public fun toggleKnobTravel(w: Double, h: Double): Double = w - h
+    public fun toggleKnobTravel(
+        w: Double,
+        h: Double,
+    ): Double = w - h
 
     // endregion
 
-    public fun dividerOutline(w: Double, h: Double, o: RoughOptions): SketchPath =
-        Rough.line(INSET, h / 2, w - INSET, h / 2, o)
+    public fun dividerOutline(
+        w: Double,
+        h: Double,
+        o: RoughOptions,
+    ): SketchPath = Rough.line(INSET, h / 2, w - INSET, h / 2, o)
 
     // region Text fields, text areas and selects
 
-    public fun fieldOutline(w: Double, h: Double, o: RoughOptions): SketchPath =
-        outlineRect(6.0, w, h, o)
+    public fun fieldOutline(
+        w: Double,
+        h: Double,
+        o: RoughOptions,
+    ): SketchPath = outlineRect(6.0, w, h, o)
 
-    public fun fieldFocus(w: Double, h: Double, o: RoughOptions): SketchPath =
-        focusRect(8.0, w, h, o)
+    public fun fieldFocus(
+        w: Double,
+        h: Double,
+        o: RoughOptions,
+    ): SketchPath = focusRect(8.0, w, h, o)
 
     public const val CHEVRON_WIDTH: Double = 12.0
     public const val CHEVRON_HEIGHT: Double = 6.0
@@ -124,7 +186,11 @@ public object DrawablyGeometry {
     /** At chevron scale, full roughness turns the V into noise. */
     public const val CHEVRON_ROUGHNESS: Double = 0.4
 
-    public fun selectChevron(w: Double, h: Double, o: RoughOptions): SketchPath {
+    public fun selectChevron(
+        w: Double,
+        h: Double,
+        o: RoughOptions,
+    ): SketchPath {
         val x = w - CHEVRON_RIGHT - CHEVRON_WIDTH
         val y = h / 2 - CHEVRON_HEIGHT / 2
         val co = o.copy(roughness = o.roughness * CHEVRON_ROUGHNESS)
@@ -143,7 +209,11 @@ public object DrawablyGeometry {
 
     /** The tick drawn next to the chosen option in a picker. */
     @Suppress("UNUSED_PARAMETER")
-    public fun selectCheckMask(w: Double, h: Double, o: RoughOptions): SketchPath {
+    public fun selectCheckMask(
+        w: Double,
+        h: Double,
+        o: RoughOptions,
+    ): SketchPath {
         val side = CHECK_BOX - CHECK_INSET * 2
         return Rough.checkmark(CHECK_INSET, CHECK_INSET, side, side, o)
     }
@@ -158,14 +228,19 @@ public object DrawablyGeometry {
     public const val POPUP_TAIL_WIDTH: Double = 18.0
 
     /** The popup's frame, which starts below the space the tail occupies. */
-    public fun popupFrame(w: Double, h: Double, o: RoughOptions): SketchPath = Rough.roundedRect(
-        INSET,
-        INSET + POPUP_TAIL_HEIGHT,
-        w - 2 * INSET,
-        h - 2 * INSET - POPUP_TAIL_HEIGHT,
-        6.0,
-        o,
-    )
+    public fun popupFrame(
+        w: Double,
+        h: Double,
+        o: RoughOptions,
+    ): SketchPath =
+        Rough.roundedRect(
+            INSET,
+            INSET + POPUP_TAIL_HEIGHT,
+            w - 2 * INSET,
+            h - 2 * INSET - POPUP_TAIL_HEIGHT,
+            6.0,
+            o,
+        )
 
     /**
      * A pen tail on the popup's top edge, pointing back at the control it
@@ -174,7 +249,11 @@ public object DrawablyGeometry {
      * platform's own chrome.
      */
     @Suppress("UNUSED_PARAMETER")
-    public fun popupTail(w: Double, h: Double, o: RoughOptions): SketchPath {
+    public fun popupTail(
+        w: Double,
+        h: Double,
+        o: RoughOptions,
+    ): SketchPath {
         // centred, because the popup is centred under the control it belongs to
         val left = (w - POPUP_TAIL_WIDTH) / 2
         val apexX = left + POPUP_TAIL_WIDTH / 2
@@ -193,24 +272,35 @@ public object DrawablyGeometry {
      * box, say — has to allow for all three, and both of the last two come from
      * the theme.
      */
-    public fun outlineReach(width: Dp, roughness: Double): Dp =
-        (INSET + width.value / 2 + 1.5 * roughness * 1.4).dp
+    public fun outlineReach(
+        width: Dp,
+        roughness: Double,
+    ): Dp = (INSET + width.value / 2 + 1.5 * roughness * 1.4).dp
 
     /**
      * Upstream sets 1dp above and below, which leaves the label inside the
      * stroke's own reach — at the default width it lands on the text, and a
      * thicker pen or a rougher hand makes it worse.
      */
-    public fun badgePadding(width: Dp, roughness: Double): PaddingValues {
+    public fun badgePadding(
+        width: Dp,
+        roughness: Double,
+    ): PaddingValues {
         val reach = outlineReach(width, roughness)
         return PaddingValues(horizontal = reach + 5.dp, vertical = reach + 2.dp)
     }
 
-    public fun badgeOutline(w: Double, h: Double, o: RoughOptions): SketchPath =
-        outlineRect(2.0, w, h, o)
+    public fun badgeOutline(
+        w: Double,
+        h: Double,
+        o: RoughOptions,
+    ): SketchPath = outlineRect(2.0, w, h, o)
 
-    public fun badgeScribble(w: Double, h: Double, o: RoughOptions): SketchPath =
-        Rough.scribbleFill(INSET + 1, INSET + 1, w - 2 * INSET - 2, h - 2 * INSET - 2, o)
+    public fun badgeScribble(
+        w: Double,
+        h: Double,
+        o: RoughOptions,
+    ): SketchPath = Rough.scribbleFill(INSET + 1, INSET + 1, w - 2 * INSET - 2, h - 2 * INSET - 2, o)
 
     // endregion
 
@@ -230,8 +320,7 @@ public object DrawablyGeometry {
         h: Double,
         o: RoughOptions,
         lineHeight: Double = MARKER_LINE,
-    ): SketchPath =
-        Rough.line(MARKER_LEFT, lineHeight / 2, MARKER_LEFT + MARKER_WIDTH, lineHeight / 2, o)
+    ): SketchPath = Rough.line(MARKER_LEFT, lineHeight / 2, MARKER_LEFT + MARKER_WIDTH, lineHeight / 2, o)
 
     @Suppress("UNUSED_PARAMETER")
     public fun listCheck(
@@ -239,13 +328,14 @@ public object DrawablyGeometry {
         h: Double,
         o: RoughOptions,
         lineHeight: Double = MARKER_LINE,
-    ): SketchPath = Rough.checkmark(
-        MARKER_LEFT,
-        lineHeight / 2 - MARKER_WIDTH / 2,
-        MARKER_WIDTH,
-        MARKER_WIDTH,
-        o,
-    )
+    ): SketchPath =
+        Rough.checkmark(
+            MARKER_LEFT,
+            lineHeight / 2 - MARKER_WIDTH / 2,
+            MARKER_WIDTH,
+            MARKER_WIDTH,
+            o,
+        )
 
     // endregion
 
@@ -261,19 +351,30 @@ public object DrawablyGeometry {
     public const val CIRCLE_PAD_Y: Double = 1.4
     public const val CIRCLE_PAD: Double = 4.0
 
-    public fun underline(w: Double, h: Double, o: RoughOptions): SketchPath =
-        Rough.line(0.0, h + UNDERLINE_GAP, w, h + UNDERLINE_GAP, o)
+    public fun underline(
+        w: Double,
+        h: Double,
+        o: RoughOptions,
+    ): SketchPath = Rough.line(0.0, h + UNDERLINE_GAP, w, h + UNDERLINE_GAP, o)
 
-    public fun highlightWash(w: Double, h: Double, o: RoughOptions): SketchPath =
-        Rough.scribbleFill(0.0, 0.0, w, h, o)
+    public fun highlightWash(
+        w: Double,
+        h: Double,
+        o: RoughOptions,
+    ): SketchPath = Rough.scribbleFill(0.0, 0.0, w, h, o)
 
-    public fun circleOutline(w: Double, h: Double, o: RoughOptions): SketchPath = Rough.ellipse(
-        w / 2,
-        h / 2,
-        (w / 2) * CIRCLE_PAD_X + CIRCLE_PAD,
-        (h / 2) * CIRCLE_PAD_Y + CIRCLE_PAD,
-        o,
-    )
+    public fun circleOutline(
+        w: Double,
+        h: Double,
+        o: RoughOptions,
+    ): SketchPath =
+        Rough.ellipse(
+            w / 2,
+            h / 2,
+            (w / 2) * CIRCLE_PAD_X + CIRCLE_PAD,
+            (h / 2) * CIRCLE_PAD_Y + CIRCLE_PAD,
+            o,
+        )
 
     // endregion
 

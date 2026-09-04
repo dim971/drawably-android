@@ -22,23 +22,26 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalClipboard
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 
 /** The source that produced the sample above it, ready to paste. */
 @Composable
-fun CodeSnippet(code: String, modifier: Modifier = Modifier) {
+fun CodeSnippet(
+    code: String,
+    modifier: Modifier = Modifier,
+) {
     val clipboard = LocalClipboard.current
     val scope = androidx.compose.runtime.rememberCoroutineScope()
     var copied by remember { mutableStateOf(false) }
 
     Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(10.dp))
-            .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.35f)),
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(10.dp))
+                .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.35f)),
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,

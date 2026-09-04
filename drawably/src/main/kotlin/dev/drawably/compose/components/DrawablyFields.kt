@@ -29,15 +29,20 @@ import dev.drawably.compose.sketch.rememberDrawablySketchState
 internal fun fieldLayers(
     focused: State<Boolean>,
     extra: List<SketchLayer> = emptyList(),
-): List<SketchLayer> = buildList {
-    add(SketchLayer(SketchRole.Outline) { size, o ->
-        DrawablyGeometry.fieldOutline(size.width.toDouble(), size.height.toDouble(), o)
-    })
-    addAll(extra)
-    add(SketchLayer(SketchRole.Focus, visible = { focused.value }) { size, o ->
-        DrawablyGeometry.fieldFocus(size.width.toDouble(), size.height.toDouble(), o)
-    })
-}
+): List<SketchLayer> =
+    buildList {
+        add(
+            SketchLayer(SketchRole.Outline) { size, o ->
+                DrawablyGeometry.fieldOutline(size.width.toDouble(), size.height.toDouble(), o)
+            },
+        )
+        addAll(extra)
+        add(
+            SketchLayer(SketchRole.Focus, visible = { focused.value }) { size, o ->
+                DrawablyGeometry.fieldFocus(size.width.toDouble(), size.height.toDouble(), o)
+            },
+        )
+    }
 
 /**
  * A single-line text field in a sketched box.
@@ -116,11 +121,12 @@ private fun DrawablyField(
     val layers = remember { fieldLayers(focused) }
 
     Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .let { if (minHeight == Dp.Unspecified) it else it.defaultMinSize(minHeight = minHeight) }
-            .drawablySketch(state, layers)
-            .padding(horizontal = 12.dp, vertical = 8.dp),
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .let { if (minHeight == Dp.Unspecified) it else it.defaultMinSize(minHeight = minHeight) }
+                .drawablySketch(state, layers)
+                .padding(horizontal = 12.dp, vertical = 8.dp),
     ) {
         if (value.isEmpty() && placeholder != null) {
             androidx.compose.foundation.text.BasicText(

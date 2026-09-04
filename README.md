@@ -170,6 +170,11 @@ it is checked in, so the app is launchable straight after cloning.
 | [Theming](docs/theming.md) | The theme, seeds, and drawing your own shapes |
 | [Fidelity](docs/fidelity.md) | How the port is verified against the original |
 | [Architecture](docs/architecture.md) | How a sketch gets from the engine to the screen |
+| [Coding style](docs/coding-style.md) | The Kotlin conventions as they apply here, and where we differ |
+
+The build enforces the mechanical half: `./gradlew ktlintCheck` for the coding
+conventions, explicit API mode for the library rules, and `./gradlew lint` for
+Android correctness.
 
 ## Contributing
 

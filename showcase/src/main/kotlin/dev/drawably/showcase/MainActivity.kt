@@ -29,7 +29,9 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-private enum class Section(val label: String) {
+private enum class Section(
+    val label: String,
+) {
     Catalog("Catalog"),
     About("About"),
 }
@@ -71,23 +73,24 @@ private fun ShowcaseApp() {
             ) { padding ->
                 when (section) {
                     Section.About -> AboutScreen(padding)
-                    Section.Catalog -> NavHost(navController, startDestination = "catalog") {
-                        composable("catalog") {
-                            title = "Drawably"
-                            CatalogHomeScreen(
-                                onOpen = { navController.navigate("component/$it") },
-                                contentPadding = padding,
-                            )
-                        }
-                        composable("component/{id}") { entry ->
-                            val id = entry.arguments?.getString("id")
-                            val item = catalog.firstOrNull { it.id == id }
-                            if (item != null) {
-                                title = item.name
-                                ComponentScreen(item, padding)
+                    Section.Catalog ->
+                        NavHost(navController, startDestination = "catalog") {
+                            composable("catalog") {
+                                title = "Drawably"
+                                CatalogHomeScreen(
+                                    onOpen = { navController.navigate("component/$it") },
+                                    contentPadding = padding,
+                                )
+                            }
+                            composable("component/{id}") { entry ->
+                                val id = entry.arguments?.getString("id")
+                                val item = catalog.firstOrNull { it.id == id }
+                                if (item != null) {
+                                    title = item.name
+                                    ComponentScreen(item, padding)
+                                }
                             }
                         }
-                    }
                 }
             }
         }

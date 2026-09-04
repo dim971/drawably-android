@@ -31,17 +31,19 @@ public fun DrawablyCard(
     content: @Composable BoxScope.() -> Unit,
 ) {
     val state = rememberDrawablySketchState(seed)
-    val layers = remember {
-        listOf(
-            SketchLayer(SketchRole.Outline) { size, o ->
-                DrawablyGeometry.cardOutline(size.width.toDouble(), size.height.toDouble(), o)
-            },
-        )
-    }
+    val layers =
+        remember {
+            listOf(
+                SketchLayer(SketchRole.Outline) { size, o ->
+                    DrawablyGeometry.cardOutline(size.width.toDouble(), size.height.toDouble(), o)
+                },
+            )
+        }
     Box(
-        modifier = modifier
-            .drawablySketch(state, layers)
-            .padding(16.dp),
+        modifier =
+            modifier
+                .drawablySketch(state, layers)
+                .padding(16.dp),
         content = content,
     )
 }
@@ -53,18 +55,20 @@ public fun DrawablyDivider(
     seed: UInt? = null,
 ) {
     val state = rememberDrawablySketchState(seed)
-    val layers = remember {
-        listOf(
-            SketchLayer(SketchRole.Outline) { size, o ->
-                DrawablyGeometry.dividerOutline(size.width.toDouble(), size.height.toDouble(), o)
-            },
-        )
-    }
+    val layers =
+        remember {
+            listOf(
+                SketchLayer(SketchRole.Outline) { size, o ->
+                    DrawablyGeometry.dividerOutline(size.width.toDouble(), size.height.toDouble(), o)
+                },
+            )
+        }
     Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(10.dp)
-            .drawablySketch(state, layers),
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .height(10.dp)
+                .drawablySketch(state, layers),
     )
 }
 
@@ -89,24 +93,30 @@ public fun DrawablyBadge(
     content: @Composable BoxScope.() -> Unit,
 ) {
     val state = rememberDrawablySketchState(seed)
-    val layers = remember(variant) {
-        buildList {
-            if (variant == DrawablyBadgeVariant.Scribble) {
-                add(SketchLayer(SketchRole.Scribble) { size, o ->
-                    DrawablyGeometry.badgeScribble(size.width.toDouble(), size.height.toDouble(), o)
-                })
+    val layers =
+        remember(variant) {
+            buildList {
+                if (variant == DrawablyBadgeVariant.Scribble) {
+                    add(
+                        SketchLayer(SketchRole.Scribble) { size, o ->
+                            DrawablyGeometry.badgeScribble(size.width.toDouble(), size.height.toDouble(), o)
+                        },
+                    )
+                }
+                add(
+                    SketchLayer(SketchRole.Outline) { size, o ->
+                        DrawablyGeometry.badgeOutline(size.width.toDouble(), size.height.toDouble(), o)
+                    },
+                )
             }
-            add(SketchLayer(SketchRole.Outline) { size, o ->
-                DrawablyGeometry.badgeOutline(size.width.toDouble(), size.height.toDouble(), o)
-            })
         }
-    }
     Box(
-        modifier = modifier
-            .drawablySketch(state, layers)
-            // the label has to clear the sketched outline, which moves with
-            // the theme's stroke width and roughness
-            .padding(DrawablyGeometry.badgePadding(state.theme.width, state.theme.roughness)),
+        modifier =
+            modifier
+                .drawablySketch(state, layers)
+                // the label has to clear the sketched outline, which moves with
+                // the theme's stroke width and roughness
+                .padding(DrawablyGeometry.badgePadding(state.theme.width, state.theme.roughness)),
         content = content,
     )
 }

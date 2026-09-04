@@ -8,7 +8,9 @@ package dev.drawably.compose.core
  * which is what lets the golden fixtures generated from the npm package pin
  * this port down exactly.
  */
-public class Mulberry32(seed: UInt) {
+public class Mulberry32(
+    seed: UInt,
+) {
     private var state: UInt = seed
 
     /** The next value in `[0, 1)`. */
@@ -22,4 +24,7 @@ public class Mulberry32(seed: UInt) {
 }
 
 /** A fresh random seed, as upstream's `randomSeed()` produces. */
-public fun randomSeed(): UInt = kotlin.random.Random.nextInt().toUInt()
+public fun randomSeed(): UInt =
+    kotlin.random.Random
+        .nextInt()
+        .toUInt()

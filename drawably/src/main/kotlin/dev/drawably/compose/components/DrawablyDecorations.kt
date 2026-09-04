@@ -26,11 +26,16 @@ public enum class DrawablyDecoration {
     internal val role: SketchRole
         get() = if (this == Highlight) SketchRole.Wash else SketchRole.Outline
 
-    internal fun shape(width: Double, height: Double, o: RoughOptions): SketchPath = when (this) {
-        Underline -> DrawablyGeometry.underline(width, height, o)
-        Highlight -> DrawablyGeometry.highlightWash(width, height, o)
-        Circle -> DrawablyGeometry.circleOutline(width, height, o)
-    }
+    internal fun shape(
+        width: Double,
+        height: Double,
+        o: RoughOptions,
+    ): SketchPath =
+        when (this) {
+            Underline -> DrawablyGeometry.underline(width, height, o)
+            Highlight -> DrawablyGeometry.highlightWash(width, height, o)
+            Circle -> DrawablyGeometry.circleOutline(width, height, o)
+        }
 }
 
 /**
@@ -51,13 +56,14 @@ public fun Modifier.drawablyDecoration(
     seed: UInt? = null,
 ): Modifier {
     val state = rememberDrawablySketchState(seed)
-    val layers = remember(decoration) {
-        listOf(
-            SketchLayer(decoration.role) { size, o ->
-                decoration.shape(size.width.toDouble(), size.height.toDouble(), o)
-            },
-        )
-    }
+    val layers =
+        remember(decoration) {
+            listOf(
+                SketchLayer(decoration.role) { size, o ->
+                    decoration.shape(size.width.toDouble(), size.height.toDouble(), o)
+                },
+            )
+        }
     return drawablySketch(state, layers, lineWidth = DRAWABLY_DECORATION_WIDTH)
 }
 
@@ -73,5 +79,4 @@ public fun Modifier.drawablyHighlight(seed: UInt? = null): Modifier =
 
 /** Loops a pen circle around this composable. */
 @Composable
-public fun Modifier.drawablyCircle(seed: UInt? = null): Modifier =
-    drawablyDecoration(DrawablyDecoration.Circle, seed)
+public fun Modifier.drawablyCircle(seed: UInt? = null): Modifier = drawablyDecoration(DrawablyDecoration.Circle, seed)

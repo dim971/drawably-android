@@ -30,10 +30,11 @@ public fun rememberDrawablySketchState(
     val reduceMotion = rememberDrawablyReduceMotion()
     return DrawablySketchState(
         seed = rememberDrawablySeed(seed),
-        frame = rememberDrawablyBoilFrame(
-            periodMillis = boilPeriodMillis,
-            enabled = !reduceMotion && theme.boil != 0.0,
-        ),
+        frame =
+            rememberDrawablyBoilFrame(
+                periodMillis = boilPeriodMillis,
+                enabled = !reduceMotion && theme.boil != 0.0,
+            ),
         theme = theme,
         reduceMotion = reduceMotion,
     )
@@ -45,11 +46,12 @@ public fun androidx.compose.ui.Modifier.drawablySketch(
     layers: List<SketchLayer>,
     ink: androidx.compose.ui.graphics.Color? = null,
     lineWidth: Double? = null,
-): androidx.compose.ui.Modifier = drawablySketch(
-    layers = layers,
-    seed = state.seed.value,
-    theme = state.theme,
-    frame = state.frame,
-    ink = ink,
-    lineWidth = lineWidth,
-)
+): androidx.compose.ui.Modifier =
+    drawablySketch(
+        layers = layers,
+        seed = state.seed.value,
+        theme = state.theme,
+        frame = state.frame,
+        ink = ink,
+        lineWidth = lineWidth,
+    )

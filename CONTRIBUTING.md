@@ -24,6 +24,7 @@ IDE does.
 
 ```sh
 ./gradlew :drawably:testDebugUnitTest
+./gradlew ktlintCheck      # ktlintFormat fixes most of what it finds
 ./gradlew lint
 ./gradlew :showcase:assembleDebug
 ```
@@ -34,7 +35,7 @@ Three things the review will look for:
 tolerated becomes a warning that is ignored.
 
 **The goldens still pass.** If you touch anything under `core/` or
-`sketch/LayerGeometry.kt`, the fixtures are the contract — see
+`sketch/DrawablyGeometry.kt`, the fixtures are the contract — see
 [docs/fidelity.md](docs/fidelity.md). Changing them means changing what this
 library claims to be, so say why in the pull request.
 
@@ -44,6 +45,11 @@ geometry, theming, a control's states — should land in both, or say plainly wh
 it should not.
 
 ## Conventions
+
+[docs/coding-style.md](docs/coding-style.md) is the full version: the
+[Kotlin coding conventions](https://kotlinlang.org/docs/coding-conventions.html)
+as they apply here, including their library rules, which explicit API mode
+enforces. The short version:
 
 - The library sits on Compose Foundation, not Material. Please keep it that way:
   it is what lets the library drop into any Compose app.

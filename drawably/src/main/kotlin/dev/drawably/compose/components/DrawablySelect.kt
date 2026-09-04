@@ -6,11 +6,10 @@ import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -24,13 +23,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntRect
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupPositionProvider
 import androidx.compose.ui.window.PopupProperties
@@ -64,29 +63,32 @@ public fun <T> DrawablySelect(
     val focused = interactionSource.collectIsFocusedAsState()
     var isOpen by remember { mutableStateOf(false) }
 
-    val layers = remember {
-        fieldLayers(
-            focused,
-            extra = listOf(
-                SketchLayer(SketchRole.Chevron) { size, o ->
-                    DrawablyGeometry.selectChevron(size.width.toDouble(), size.height.toDouble(), o)
-                },
-            ),
-        )
-    }
+    val layers =
+        remember {
+            fieldLayers(
+                focused,
+                extra =
+                    listOf(
+                        SketchLayer(SketchRole.Chevron) { size, o ->
+                            DrawablyGeometry.selectChevron(size.width.toDouble(), size.height.toDouble(), o)
+                        },
+                    ),
+            )
+        }
 
     Box(modifier) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .clickable(
-                    interactionSource = interactionSource,
-                    indication = null,
-                ) { isOpen = true }
-                .drawablySketch(state, layers)
-                .padding(start = 12.dp, top = 8.dp, bottom = 8.dp)
-                // the gutter the sketched chevron is drawn into
-                .padding(end = 34.dp),
+            modifier =
+                Modifier
+                    .clickable(
+                        interactionSource = interactionSource,
+                        indication = null,
+                    ) { isOpen = true }
+                    .drawablySketch(state, layers)
+                    .padding(start = 12.dp, top = 8.dp, bottom = 8.dp)
+                    // the gutter the sketched chevron is drawn into
+                    .padding(end = 34.dp),
         ) {
             // Every option is laid out invisibly under the chosen one, so the
             // box is already as wide as the widest — picking never shifts the
@@ -140,49 +142,53 @@ private fun <T> DrawablySelectOptions(
     onSelect: (T) -> Unit,
 ) {
     val state = rememberDrawablySketchState(seed)
-    val frameLayers = remember {
-        listOf(
-            SketchLayer(SketchRole.Outline) { size, o ->
-                DrawablyGeometry.popupFrame(size.width.toDouble(), size.height.toDouble(), o)
-            },
-            SketchLayer(SketchRole.Outline) { size, o ->
-                DrawablyGeometry.popupTail(size.width.toDouble(), size.height.toDouble(), o)
-            },
-        )
-    }
+    val frameLayers =
+        remember {
+            listOf(
+                SketchLayer(SketchRole.Outline) { size, o ->
+                    DrawablyGeometry.popupFrame(size.width.toDouble(), size.height.toDouble(), o)
+                },
+                SketchLayer(SketchRole.Outline) { size, o ->
+                    DrawablyGeometry.popupTail(size.width.toDouble(), size.height.toDouble(), o)
+                },
+            )
+        }
     Column(
         verticalArrangement = Arrangement.spacedBy(4.dp),
-        modifier = Modifier
-            // hug the widest option instead of filling the window, so the list
-            // is the size iOS's is
-            .width(IntrinsicSize.Max)
-            // paper first, so the frame and its tail are drawn over it
-            .drawBehind { drawRect(state.theme.paper) }
-            .drawablySketch(state, frameLayers)
-            .padding(6.dp)
-            // room at the top for the tail, which is drawn inside the box
-            .padding(top = DrawablyGeometry.POPUP_TAIL_HEIGHT.dp),
+        modifier =
+            Modifier
+                // hug the widest option instead of filling the window, so the list
+                // is the size iOS's is
+                .width(IntrinsicSize.Max)
+                // paper first, so the frame and its tail are drawn over it
+                .drawBehind { drawRect(state.theme.paper) }
+                .drawablySketch(state, frameLayers)
+                .padding(6.dp)
+                // room at the top for the tail, which is drawn inside the box
+                .padding(top = DrawablyGeometry.POPUP_TAIL_HEIGHT.dp),
     ) {
         options.forEachIndexed { index, option ->
-            val tickLayers = remember(option == selected) {
-                listOf(
-                    SketchLayer(SketchRole.Check, visible = { option == selected }) { size, o ->
-                        DrawablyGeometry.selectCheckMask(
-                            size.width.toDouble(),
-                            size.height.toDouble(),
-                            o,
-                        )
-                    },
-                )
-            }
+            val tickLayers =
+                remember(option == selected) {
+                    listOf(
+                        SketchLayer(SketchRole.Check, visible = { option == selected }) { size, o ->
+                            DrawablyGeometry.selectCheckMask(
+                                size.width.toDouble(),
+                                size.height.toDouble(),
+                                o,
+                            )
+                        },
+                    )
+                }
             // each row gets its own sketch, the way upstream seeds list items
             val rowState = rememberDrawablySketchState(seed + index.toUInt())
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable { onSelect(option) }
-                    .padding(horizontal = 8.dp, vertical = 4.dp),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .clickable { onSelect(option) }
+                        .padding(horizontal = 8.dp, vertical = 4.dp),
             ) {
                 Box(
                     Modifier
@@ -197,7 +203,9 @@ private fun <T> DrawablySelectOptions(
 }
 
 /** Puts a popup immediately below its anchor, centred on it. */
-private class BelowAnchor(private val gap: Int) : PopupPositionProvider {
+private class BelowAnchor(
+    private val gap: Int,
+) : PopupPositionProvider {
     override fun calculatePosition(
         anchorBounds: IntRect,
         windowSize: IntSize,

@@ -53,32 +53,33 @@ public fun <T> DrawablyList(
     ) {
         items.forEachIndexed { index, item ->
             val rowState = rememberDrawablySketchState(base.seed.value + index.toUInt())
-            val layers = remember(marker) {
-                listOf(
-                    SketchLayer(SketchRole.Marker) { size, o ->
-                        // the marker is drawn to the left of the row's own box,
-                        // so it lands in the list's leading padding
-                        val height = size.height.toDouble()
-                        when (marker) {
-                            DrawablyListMarker.Dash ->
-                                DrawablyGeometry.listDash(
-                                    size.width.toDouble(),
-                                    height,
-                                    o,
-                                    lineHeight = height,
-                                )
+            val layers =
+                remember(marker) {
+                    listOf(
+                        SketchLayer(SketchRole.Marker) { size, o ->
+                            // the marker is drawn to the left of the row's own box,
+                            // so it lands in the list's leading padding
+                            val height = size.height.toDouble()
+                            when (marker) {
+                                DrawablyListMarker.Dash ->
+                                    DrawablyGeometry.listDash(
+                                        size.width.toDouble(),
+                                        height,
+                                        o,
+                                        lineHeight = height,
+                                    )
 
-                            DrawablyListMarker.Check ->
-                                DrawablyGeometry.listCheck(
-                                    size.width.toDouble(),
-                                    height,
-                                    o,
-                                    lineHeight = height,
-                                )
-                        }
-                    },
-                )
-            }
+                                DrawablyListMarker.Check ->
+                                    DrawablyGeometry.listCheck(
+                                        size.width.toDouble(),
+                                        height,
+                                        o,
+                                        lineHeight = height,
+                                    )
+                            }
+                        },
+                    )
+                }
             Box(
                 Modifier
                     .fillMaxWidth()

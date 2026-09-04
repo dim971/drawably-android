@@ -47,37 +47,43 @@ public fun DrawablyDecoratedText(
         text = text,
         style = style.copy(color = state.theme.stroke),
         onTextLayout = { layout = it },
-        modifier = modifier.drawWithCache {
-            val result = layout
-            // line boxes arrive in pixels; the sketch is generated in the
-            // density-independent units roughness is expressed in
-            val frames = result?.let {
-                buildLineFrames(
-                    layout = it,
-                    density = density,
-                    seed = state.seed.value,
-                    roughness = state.theme.roughness,
-                    boil = state.theme.boil,
-                    decoration = decoration,
-                )
-            } ?: emptyList()
+        modifier =
+            modifier.drawWithCache {
+                val result = layout
+                // line boxes arrive in pixels; the sketch is generated in the
+                // density-independent units roughness is expressed in
+                val frames =
+                    result?.let {
+                        buildLineFrames(
+                            layout = it,
+                            density = density,
+                            seed = state.seed.value,
+                            roughness = state.theme.roughness,
+                            boil = state.theme.boil,
+                            decoration = decoration,
+                        )
+                    } ?: emptyList()
 
-            onDrawWithContent {
-                // a highlight goes behind the words; a line or a loop goes over
-                if (decoration == DrawablyDecoration.Highlight) {
-                    drawMarks(frames, decoration, color, state.frame.value)
+                onDrawWithContent {
+                    // a highlight goes behind the words; a line or a loop goes over
+                    if (decoration == DrawablyDecoration.Highlight) {
+                        drawMarks(frames, decoration, color, state.frame.value)
+                    }
+                    drawContent()
+                    if (decoration != DrawablyDecoration.Highlight) {
+                        drawMarks(frames, decoration, color, state.frame.value)
+                    }
                 }
-                drawContent()
-                if (decoration != DrawablyDecoration.Highlight) {
-                    drawMarks(frames, decoration, color, state.frame.value)
-                }
-            }
-        },
+            },
     )
 }
 
 /** One line's boil frames, and where on the page they belong. */
-private class LineFrames(val left: Float, val top: Float, val paths: List<Path>)
+private class LineFrames(
+    val left: Float,
+    val top: Float,
+    val paths: List<Path>,
+)
 
 private fun buildLineFrames(
     layout: TextLayoutResult,
@@ -86,24 +92,28 @@ private fun buildLineFrames(
     roughness: Double,
     boil: Double,
     decoration: DrawablyDecoration,
-): List<LineFrames> = (0 until layout.lineCount).map { line ->
-    val left = layout.getLineLeft(line) / density
-    val top = layout.getLineTop(line) / density
-    val size = Size(
-        layout.getLineRight(line) / density - left,
-        layout.getLineBottom(line) / density - top,
-    )
-    val options = RoughOptions(seed = seed + line.toUInt(), roughness = roughness, boil = boil)
-    LineFrames(
-        left = left,
-        top = top,
-        paths = Rough.variants(
-            { o -> decoration.shape(size.width.toDouble(), size.height.toDouble(), o) },
-            options,
-            if (boil == 0.0) 1 else 3,
-        ).map { it.toComposePath() },
-    )
-}
+): List<LineFrames> =
+    (0 until layout.lineCount).map { line ->
+        val left = layout.getLineLeft(line) / density
+        val top = layout.getLineTop(line) / density
+        val size =
+            Size(
+                layout.getLineRight(line) / density - left,
+                layout.getLineBottom(line) / density - top,
+            )
+        val options = RoughOptions(seed = seed + line.toUInt(), roughness = roughness, boil = boil)
+        LineFrames(
+            left = left,
+            top = top,
+            paths =
+                Rough
+                    .variants(
+                        { o -> decoration.shape(size.width.toDouble(), size.height.toDouble(), o) },
+                        options,
+                        if (boil == 0.0) 1 else 3,
+                    ).map { it.toComposePath() },
+        )
+    }
 
 private fun DrawScope.drawMarks(
     lines: List<LineFrames>,
@@ -112,11 +122,12 @@ private fun DrawScope.drawMarks(
     frame: Int,
 ) {
     val role = decoration.role
-    val stroke = Stroke(
-        width = (role.fixedLineWidth ?: DRAWABLY_DECORATION_WIDTH).toFloat(),
-        cap = StrokeCap.Round,
-        join = StrokeJoin.Round,
-    )
+    val stroke =
+        Stroke(
+            width = (role.fixedLineWidth ?: DRAWABLY_DECORATION_WIDTH).toFloat(),
+            cap = StrokeCap.Round,
+            join = StrokeJoin.Round,
+        )
     scale(density, density, pivot = Offset.Zero) {
         for (line in lines) {
             translate(left = line.left, top = line.top) {

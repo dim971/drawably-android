@@ -1,24 +1,32 @@
 package dev.drawably.compose.core
 
-import kotlin.math.ceil
 import kotlin.math.PI
+import kotlin.math.ceil
 import kotlin.math.max
 
 /** A point in the sketch's own coordinate space. */
-public data class Pt(val x: Double, val y: Double)
+public data class Pt(
+    val x: Double,
+    val y: Double,
+)
 
 /**
  * One continuous pen stroke: a jittered polyline that gets smoothed through the
  * midpoints between its points when it is turned into a path.
  */
-public data class Subpath(val points: List<Pt>, val closed: Boolean)
+public data class Subpath(
+    val points: List<Pt>,
+    val closed: Boolean,
+)
 
 /**
  * A whole sketched shape. Upstream concatenates SVG `d` strings; the same
  * concatenation here is a list of strokes, so nothing is lost and the geometry
  * stays inspectable.
  */
-public data class SketchPath(val subpaths: List<Subpath> = emptyList()) {
+public data class SketchPath(
+    val subpaths: List<Subpath> = emptyList(),
+) {
     public operator fun plus(other: SketchPath): SketchPath = SketchPath(subpaths + other.subpaths)
 
     public val isEmpty: Boolean get() = subpaths.isEmpty()
@@ -26,7 +34,6 @@ public data class SketchPath(val subpaths: List<Subpath> = emptyList()) {
 
 /** The stroke engine. A direct port of upstream `src/rough.ts`. */
 public object Rough {
-
     // region Sampling
 
     /** Walks a straight edge in [step]-pixel increments. */
@@ -52,10 +59,11 @@ public object Rough {
         a0: Double,
         a1: Double,
         n: Int,
-    ): List<Pt> = (0..n).map { i ->
-        val a = a0 + (a1 - a0) * i.toDouble() / n
-        Pt(cx + rx * jsCos(a), cy + ry * jsSin(a))
-    }
+    ): List<Pt> =
+        (0..n).map { i ->
+            val a = a0 + (a1 - a0) * i.toDouble() / n
+            Pt(cx + rx * jsCos(a), cy + ry * jsSin(a))
+        }
 
     internal fun arcPoints(
         cx: Double,
@@ -94,14 +102,21 @@ public object Rough {
      * the y draw — reordering them would desynchronise the whole PRNG stream and
      * change every sketch downstream.
      */
-    public fun jitter(points: List<Pt>, rand: Mulberry32, amp: Double): List<Pt> =
+    public fun jitter(
+        points: List<Pt>,
+        rand: Mulberry32,
+        amp: Double,
+    ): List<Pt> =
         points.map { p ->
             val dx = (rand.next() * 2 - 1) * amp
             val dy = (rand.next() * 2 - 1) * amp
             Pt(p.x + dx, p.y + dy)
         }
 
-    internal fun boilPass(points: List<Pt>, o: RoughOptions): List<Pt> {
+    internal fun boilPass(
+        points: List<Pt>,
+        o: RoughOptions,
+    ): List<Pt> {
         val boilSeed = o.boilSeed
         if (o.boil == 0.0 || boilSeed == null) return points
         return jitter(points, Mulberry32(boilSeed), o.boil)
@@ -111,7 +126,11 @@ public object Rough {
      * Draws the shape twice from one PRNG stream, the second pass 1.4× wider than
      * the first — the overlap is what reads as a pen going over a line.
      */
-    internal fun doubleStroke(points: List<Pt>, o: RoughOptions, close: Boolean): SketchPath {
+    internal fun doubleStroke(
+        points: List<Pt>,
+        o: RoughOptions,
+        close: Boolean,
+    ): SketchPath {
         val rand = Mulberry32(o.seed)
         val amp = 1.5 * o.roughness
         val first = boilPass(jitter(points, rand, amp), o)
@@ -129,7 +148,8 @@ public object Rough {
         generate: (RoughOptions) -> SketchPath,
         o: RoughOptions,
         count: Int = 3,
-    ): List<SketchPath> = (0 until count).map { i ->
-        generate(o.copy(boilSeed = o.seed + ((i + 1) * 7919).toUInt()))
-    }
+    ): List<SketchPath> =
+        (0 until count).map { i ->
+            generate(o.copy(boilSeed = o.seed + ((i + 1) * 7919).toUInt()))
+        }
 }

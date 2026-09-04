@@ -24,7 +24,6 @@ import dev.drawably.compose.core.Rough
 import dev.drawably.compose.core.RoughOptions
 import dev.drawably.compose.core.SketchPath
 import dev.drawably.compose.theme.DrawablyTheme
-import dev.drawably.compose.theme.LocalDrawablyTheme
 import kotlinx.coroutines.delay
 
 /**
@@ -91,16 +90,17 @@ public fun rememberDrawablyReduceMotion(): Boolean {
 public fun rememberDrawablyBoilFrame(
     periodMillis: Long = DRAWABLY_BOIL_PERIOD_MS,
     enabled: Boolean = true,
-): State<Int> = produceState(0, periodMillis, enabled) {
-    if (!enabled) {
-        value = 0
-        return@produceState
+): State<Int> =
+    produceState(0, periodMillis, enabled) {
+        if (!enabled) {
+            value = 0
+            return@produceState
+        }
+        while (true) {
+            delay(periodMillis)
+            value = (value + 1) % BOIL_FRAMES
+        }
     }
-    while (true) {
-        delay(periodMillis)
-        value = (value + 1) % BOIL_FRAMES
-    }
-}
 
 /**
  * Draws a sketch behind the content.
@@ -122,31 +122,34 @@ public fun Modifier.drawablySketch(
     frame: State<Int>,
     ink: Color? = null,
     lineWidth: Double? = null,
-): Modifier = drawWithCache {
-    val options = RoughOptions(seed = seed, roughness = theme.roughness, boil = theme.boil)
-    val count = if (theme.boil == 0.0) 1 else BOIL_FRAMES
-    val boxDp = Size(size.width / density, size.height / density)
-    val generated: List<List<Path>> = layers.map { layer ->
-        Rough.variants({ o -> layer.generate(boxDp, o) }, options, count)
-            .map { it.toComposePath() }
-    }
+): Modifier =
+    drawWithCache {
+        val options = RoughOptions(seed = seed, roughness = theme.roughness, boil = theme.boil)
+        val count = if (theme.boil == 0.0) 1 else BOIL_FRAMES
+        val boxDp = Size(size.width / density, size.height / density)
+        val generated: List<List<Path>> =
+            layers.map { layer ->
+                Rough
+                    .variants({ o -> layer.generate(boxDp, o) }, options, count)
+                    .map { it.toComposePath() }
+            }
 
-    onDrawBehind {
-        scale(density, density, pivot = Offset.Zero) {
-            layers.forEachIndexed { index, layer ->
-                if (!layer.visible()) return@forEachIndexed
-                val frames = generated[index]
-                drawLayer(
-                    layer = layer,
-                    path = frames[frame.value % frames.size],
-                    theme = theme,
-                    ink = ink,
-                    lineWidth = lineWidth,
-                )
+        onDrawBehind {
+            scale(density, density, pivot = Offset.Zero) {
+                layers.forEachIndexed { index, layer ->
+                    if (!layer.visible()) return@forEachIndexed
+                    val frames = generated[index]
+                    drawLayer(
+                        layer = layer,
+                        path = frames[frame.value % frames.size],
+                        theme = theme,
+                        ink = ink,
+                        lineWidth = lineWidth,
+                    )
+                }
             }
         }
     }
-}
 
 private fun DrawScope.drawLayer(
     layer: SketchLayer,
@@ -159,11 +162,12 @@ private fun DrawScope.drawLayer(
     // the canvas is already scaled to pixels, so widths stay in the same
     // density-independent units the geometry uses
     val width = (layer.role.fixedLineWidth ?: lineWidth ?: theme.width.value.toDouble()).toFloat()
-    val stroke = Stroke(
-        width = width,
-        cap = StrokeCap.Round,
-        join = StrokeJoin.Round,
-    )
+    val stroke =
+        Stroke(
+            width = width,
+            cap = StrokeCap.Round,
+            join = StrokeJoin.Round,
+        )
     val trim = layer.trim()
     if (trim <= 0f) return
 

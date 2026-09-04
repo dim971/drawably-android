@@ -70,30 +70,32 @@ public fun DrawablyCheckbox(
         animationSpec = tween(durationMillis = 240, easing = DrawablyEase),
         label = "drawablyCheck",
     )
-    val layers = remember {
-        listOf(
-            SketchLayer(SketchRole.Outline) { size, o ->
-                DrawablyGeometry.checkboxOutline(size.width.toDouble(), size.height.toDouble(), o)
-            },
-            SketchLayer(SketchRole.Check, trim = { drawn }) { size, o ->
-                DrawablyGeometry.checkboxCheck(size.width.toDouble(), size.height.toDouble(), o)
-            },
-            SketchLayer(SketchRole.Focus, visible = { focused.value }) { size, o ->
-                DrawablyGeometry.checkboxFocus(size.width.toDouble(), size.height.toDouble(), o)
-            },
-        )
-    }
+    val layers =
+        remember {
+            listOf(
+                SketchLayer(SketchRole.Outline) { size, o ->
+                    DrawablyGeometry.checkboxOutline(size.width.toDouble(), size.height.toDouble(), o)
+                },
+                SketchLayer(SketchRole.Check, trim = { drawn }) { size, o ->
+                    DrawablyGeometry.checkboxCheck(size.width.toDouble(), size.height.toDouble(), o)
+                },
+                SketchLayer(SketchRole.Focus, visible = { focused.value }) { size, o ->
+                    DrawablyGeometry.checkboxFocus(size.width.toDouble(), size.height.toDouble(), o)
+                },
+            )
+        }
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier.toggleable(
-            value = checked,
-            onValueChange = onCheckedChange,
-            enabled = enabled,
-            role = Role.Checkbox,
-            interactionSource = interactionSource,
-            indication = null,
-        ),
+        modifier =
+            modifier.toggleable(
+                value = checked,
+                onValueChange = onCheckedChange,
+                enabled = enabled,
+                role = Role.Checkbox,
+                interactionSource = interactionSource,
+                indication = null,
+            ),
     ) {
         Box(
             Modifier
@@ -130,39 +132,43 @@ public fun DrawablySwitch(
 
     // the knob is drawn at the left end and slid across; its travel is the
     // pill's width less its height, so the circle lands centred either way
-    val travelDp = DrawablyGeometry.toggleKnobTravel(
-        DrawablyToggleWidth.value.toDouble(),
-        DrawablyToggleHeight.value.toDouble(),
-    ).toFloat()
+    val travelDp =
+        DrawablyGeometry
+            .toggleKnobTravel(
+                DrawablyToggleWidth.value.toDouble(),
+                DrawablyToggleHeight.value.toDouble(),
+            ).toFloat()
     val travel by animateFloatAsState(
         targetValue = if (checked) travelDp else 0f,
         animationSpec = tween(durationMillis = 160, easing = DrawablyEase),
         label = "drawablyKnob",
     )
-    val layers = remember {
-        listOf(
-            SketchLayer(SketchRole.Outline) { size, o ->
-                DrawablyGeometry.toggleOutline(size.width.toDouble(), size.height.toDouble(), o)
-            },
-            SketchLayer(SketchRole.Knob, offsetX = { travel }) { size, o ->
-                DrawablyGeometry.toggleKnob(size.width.toDouble(), size.height.toDouble(), o)
-            },
-            SketchLayer(SketchRole.Focus, visible = { focused.value }) { size, o ->
-                DrawablyGeometry.toggleFocus(size.width.toDouble(), size.height.toDouble(), o)
-            },
-        )
-    }
+    val layers =
+        remember {
+            listOf(
+                SketchLayer(SketchRole.Outline) { size, o ->
+                    DrawablyGeometry.toggleOutline(size.width.toDouble(), size.height.toDouble(), o)
+                },
+                SketchLayer(SketchRole.Knob, offsetX = { travel }) { size, o ->
+                    DrawablyGeometry.toggleKnob(size.width.toDouble(), size.height.toDouble(), o)
+                },
+                SketchLayer(SketchRole.Focus, visible = { focused.value }) { size, o ->
+                    DrawablyGeometry.toggleFocus(size.width.toDouble(), size.height.toDouble(), o)
+                },
+            )
+        }
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier.toggleable(
-            value = checked,
-            onValueChange = onCheckedChange,
-            enabled = enabled,
-            role = Role.Switch,
-            interactionSource = interactionSource,
-            indication = null,
-        ),
+        modifier =
+            modifier.toggleable(
+                value = checked,
+                onValueChange = onCheckedChange,
+                enabled = enabled,
+                role = Role.Switch,
+                interactionSource = interactionSource,
+                indication = null,
+            ),
     ) {
         if (label != null) {
             label()
@@ -204,34 +210,36 @@ public fun DrawablyRadioButton(
         animationSpec = tween(durationMillis = 160, easing = DrawablyEase),
         label = "drawablyDot",
     )
-    val layers = remember {
-        listOf(
-            SketchLayer(SketchRole.Outline) { size, o ->
-                DrawablyGeometry.radioOutline(size.width.toDouble(), size.height.toDouble(), o)
-            },
-            SketchLayer(
-                SketchRole.Dot,
-                visible = { selected },
-                scale = { pop },
-            ) { size, o ->
-                DrawablyGeometry.radioDot(size.width.toDouble(), size.height.toDouble(), o)
-            },
-            SketchLayer(SketchRole.Focus, visible = { focused.value }) { size, o ->
-                DrawablyGeometry.radioFocus(size.width.toDouble(), size.height.toDouble(), o)
-            },
-        )
-    }
+    val layers =
+        remember {
+            listOf(
+                SketchLayer(SketchRole.Outline) { size, o ->
+                    DrawablyGeometry.radioOutline(size.width.toDouble(), size.height.toDouble(), o)
+                },
+                SketchLayer(
+                    SketchRole.Dot,
+                    visible = { selected },
+                    scale = { pop },
+                ) { size, o ->
+                    DrawablyGeometry.radioDot(size.width.toDouble(), size.height.toDouble(), o)
+                },
+                SketchLayer(SketchRole.Focus, visible = { focused.value }) { size, o ->
+                    DrawablyGeometry.radioFocus(size.width.toDouble(), size.height.toDouble(), o)
+                },
+            )
+        }
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier.selectable(
-            selected = selected,
-            onClick = onClick,
-            enabled = enabled,
-            role = Role.RadioButton,
-            interactionSource = interactionSource,
-            indication = null,
-        ),
+        modifier =
+            modifier.selectable(
+                selected = selected,
+                onClick = onClick,
+                enabled = enabled,
+                role = Role.RadioButton,
+                interactionSource = interactionSource,
+                indication = null,
+            ),
     ) {
         Box(
             Modifier

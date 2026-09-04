@@ -43,11 +43,12 @@ fun PenControls(modifier: Modifier = Modifier) {
     val settings = LocalShowcaseSettings.current
     Column(
         verticalArrangement = Arrangement.spacedBy(6.dp),
-        modifier = modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(12.dp))
-            .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f))
-            .padding(14.dp),
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(12.dp))
+                .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f))
+                .padding(14.dp),
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text("Pen", fontWeight = FontWeight.SemiBold, style = MaterialTheme.typography.titleSmall)

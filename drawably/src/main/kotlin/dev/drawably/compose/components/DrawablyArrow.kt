@@ -31,7 +31,11 @@ import kotlin.math.max
 import kotlin.math.min
 
 /** One arrow, from one named anchor to another. */
-public data class DrawablyArrow(val from: Any, val to: Any, val seed: UInt? = null)
+public data class DrawablyArrow(
+    val from: Any,
+    val to: Any,
+    val seed: UInt? = null,
+)
 
 /** Lets content inside a [DrawablyArrowLayer] name itself as an anchor. */
 @Stable
@@ -40,12 +44,13 @@ public class DrawablyArrowScope internal constructor() {
     internal var layer: LayoutCoordinates? by mutableStateOf(null)
 
     /** Names this composable so the enclosing layer can point at it. */
-    public fun Modifier.drawablyAnchor(id: Any): Modifier = onGloballyPositioned { coordinates ->
-        val root = layer ?: return@onGloballyPositioned
-        if (root.isAttached && coordinates.isAttached) {
-            anchors[id] = root.localBoundingBoxOf(coordinates)
+    public fun Modifier.drawablyAnchor(id: Any): Modifier =
+        onGloballyPositioned { coordinates ->
+            val root = layer ?: return@onGloballyPositioned
+            if (root.isAttached && coordinates.isAttached) {
+                anchors[id] = root.localBoundingBoxOf(coordinates)
+            }
         }
-    }
 }
 
 /**
@@ -72,48 +77,56 @@ public fun DrawablyArrowLayer(
     val state = rememberDrawablySketchState()
 
     Box(
-        modifier = modifier
-            .onGloballyPositioned { scope.layer = it }
-            .drawWithCache {
-                // anchors arrive in pixels; the sketch is generated in the
-                // density-independent units roughness is expressed in
-                val plans = arrows.mapIndexedNotNull { index, arrow ->
-                    val from = scope.anchors[arrow.from]?.dividedBy(density)
-                        ?: return@mapIndexedNotNull null
-                    val to = scope.anchors[arrow.to]?.dividedBy(density)
-                        ?: return@mapIndexedNotNull null
-                    val plan = planArrow(from, to, DrawablyGeometry.ARROW_GAP)
-                    val options = RoughOptions(
-                        seed = (arrow.seed ?: state.seed.value) + index.toUInt(),
-                        roughness = state.theme.roughness,
-                        boil = state.theme.boil,
-                    )
-                    plan to Rough.variants(
-                        { o -> Rough.arrow(plan.x1, plan.y1, plan.x2, plan.y2, o) },
-                        options,
-                        if (state.theme.boil == 0.0) 1 else 3,
-                    ).map { it.toComposePath() }
-                }
-                val stroke = Stroke(
-                    width = state.theme.width.value,
-                    cap = StrokeCap.Round,
-                    join = StrokeJoin.Round,
-                )
-                onDrawWithContent {
-                    drawContent()
-                    scale(density, density, pivot = Offset.Zero) {
-                        for ((plan, paths) in plans) {
-                            translate(left = plan.left, top = plan.top) {
-                                drawPath(
-                                    path = paths[state.frame.value % paths.size],
-                                    color = state.theme.stroke,
-                                    style = stroke,
+        modifier =
+            modifier
+                .onGloballyPositioned { scope.layer = it }
+                .drawWithCache {
+                    // anchors arrive in pixels; the sketch is generated in the
+                    // density-independent units roughness is expressed in
+                    val plans =
+                        arrows.mapIndexedNotNull { index, arrow ->
+                            val from =
+                                scope.anchors[arrow.from]?.dividedBy(density)
+                                    ?: return@mapIndexedNotNull null
+                            val to =
+                                scope.anchors[arrow.to]?.dividedBy(density)
+                                    ?: return@mapIndexedNotNull null
+                            val plan = planArrow(from, to, DrawablyGeometry.ARROW_GAP)
+                            val options =
+                                RoughOptions(
+                                    seed = (arrow.seed ?: state.seed.value) + index.toUInt(),
+                                    roughness = state.theme.roughness,
+                                    boil = state.theme.boil,
                                 )
+                            plan to
+                                Rough
+                                    .variants(
+                                        { o -> Rough.arrow(plan.x1, plan.y1, plan.x2, plan.y2, o) },
+                                        options,
+                                        if (state.theme.boil == 0.0) 1 else 3,
+                                    ).map { it.toComposePath() }
+                        }
+                    val stroke =
+                        Stroke(
+                            width = state.theme.width.value,
+                            cap = StrokeCap.Round,
+                            join = StrokeJoin.Round,
+                        )
+                    onDrawWithContent {
+                        drawContent()
+                        scale(density, density, pivot = Offset.Zero) {
+                            for ((plan, paths) in plans) {
+                                translate(left = plan.left, top = plan.top) {
+                                    drawPath(
+                                        path = paths[state.frame.value % paths.size],
+                                        color = state.theme.stroke,
+                                        style = stroke,
+                                    )
+                                }
                             }
                         }
                     }
-                }
-            },
+                },
     ) {
         scope.content()
     }
@@ -135,13 +148,18 @@ internal class ArrowPlan(
 private fun Rect.dividedBy(density: Float): Rect =
     Rect(left / density, top / density, right / density, bottom / density)
 
-internal fun planArrow(from: Rect, to: Rect, gap: Double): ArrowPlan {
-    val box = Rect(
-        left = min(from.left, to.left),
-        top = min(from.top, to.top),
-        right = max(from.right, to.right),
-        bottom = max(from.bottom, to.bottom),
-    )
+internal fun planArrow(
+    from: Rect,
+    to: Rect,
+    gap: Double,
+): ArrowPlan {
+    val box =
+        Rect(
+            left = min(from.left, to.left),
+            top = min(from.top, to.top),
+            right = max(from.right, to.right),
+            bottom = max(from.bottom, to.bottom),
+        )
     val startX = (from.center.x - box.left).toDouble()
     val startY = (from.center.y - box.top).toDouble()
     val endX = (to.center.x - box.left).toDouble()
@@ -155,10 +173,11 @@ internal fun planArrow(from: Rect, to: Rect, gap: Double): ArrowPlan {
     // How far from a box's centre its edge is, along the connecting line.
     // A zero-size box gives 0/0 and means "no inset".
     fun exit(rect: Rect): Double {
-        val candidates = listOf(
-            rect.width / 2.0 / abs(ux),
-            rect.height / 2.0 / abs(uy),
-        ).filter { !it.isNaN() && it != 0.0 }
+        val candidates =
+            listOf(
+                rect.width / 2.0 / abs(ux),
+                rect.height / 2.0 / abs(uy),
+            ).filter { !it.isNaN() && it != 0.0 }
         return candidates.minOrNull() ?: 0.0
     }
 

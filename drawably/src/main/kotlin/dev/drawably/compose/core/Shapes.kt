@@ -14,8 +14,12 @@ public fun Rough.line(
     o: RoughOptions,
 ): SketchPath = doubleStroke(sampleLine(x1, y1, x2, y2), o, false)
 
-public fun Rough.circle(cx: Double, cy: Double, r: Double, o: RoughOptions): SketchPath =
-    ellipse(cx, cy, r, r, o)
+public fun Rough.circle(
+    cx: Double,
+    cy: Double,
+    r: Double,
+    o: RoughOptions,
+): SketchPath = ellipse(cx, cy, r, r, o)
 
 /**
  * Ramanujan's perimeter approximation, sampled every 8 pixels like the lines
@@ -56,6 +60,7 @@ public fun Rough.arrow(
     o: RoughOptions,
 ): SketchPath {
     val a = jsAtan2(y2 - y1, x2 - x1)
+
     fun wing(da: Double) = Pt(x2 - ARROW_HEAD * jsCos(a + da), y2 - ARROW_HEAD * jsSin(a + da))
 
     // The shaft runs its own stream off the same seed; both wings then share a
@@ -63,6 +68,7 @@ public fun Rough.arrow(
     val shaft = line(x1, y1, x2, y2, o)
     val rand = Mulberry32(o.seed)
     val amp = 1.2 * o.roughness
+
     fun head(p: Pt) = Subpath(boilPass(jitter(sampleLine(x2, y2, p.x, p.y, 4.0), rand, amp), o), false)
 
     return shaft + SketchPath(listOf(head(wing(ARROW_HEAD_ANGLE)), head(wing(-ARROW_HEAD_ANGLE))))
@@ -78,8 +84,9 @@ public fun Rough.checkmark(
     val rand = Mulberry32(o.seed)
     // The shared vertex is deliberately duplicated: midpoint smoothing would
     // otherwise round the corner off.
-    val pts = sampleLine(x, y + h * 0.6, x + w * 0.35, y + h, 4.0) +
-        sampleLine(x + w * 0.35, y + h, x + w, y, 4.0)
+    val pts =
+        sampleLine(x, y + h * 0.6, x + w * 0.35, y + h, 4.0) +
+            sampleLine(x + w * 0.35, y + h, x + w, y, 4.0)
     return SketchPath(listOf(Subpath(boilPass(jitter(pts, rand, 1.2 * o.roughness), o), false)))
 }
 
@@ -99,7 +106,13 @@ public fun Rough.scribbleFill(
     while (t < w + h) {
         val a = Pt(x + max(0.0, t - h), y + min(t, h))
         val b = Pt(x + min(t, w), y + max(0.0, t - w))
-        if (flip) { pts += b; pts += a } else { pts += a; pts += b }
+        if (flip) {
+            pts += b
+            pts += a
+        } else {
+            pts += a
+            pts += b
+        }
         flip = !flip
         t += gap
     }

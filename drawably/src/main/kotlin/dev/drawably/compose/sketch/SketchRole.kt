@@ -49,12 +49,13 @@ public enum class SketchRole {
 
     /** `null` means "whatever the theme's stroke width is". */
     public val fixedLineWidth: Double?
-        get() = when (this) {
-            Blob, Knob -> 4.0
-            Scribble, Focus -> 1.5
-            Wash -> 6.0
-            else -> null
-        }
+        get() =
+            when (this) {
+                Blob, Knob -> 4.0
+                Scribble, Focus -> 1.5
+                Wash -> 6.0
+                else -> null
+            }
 
     public val opacity: Float get() = if (this == Wash) 0.3f else 1f
 

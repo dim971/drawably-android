@@ -19,7 +19,10 @@ import dev.drawably.compose.core.randomSeed
  * unpinned one is rolled again whenever the control is touched.
  */
 @Stable
-public class DrawablySeed internal constructor(initial: UInt, private val pinned: UInt?) {
+public class DrawablySeed internal constructor(
+    initial: UInt,
+    private val pinned: UInt?,
+) {
     public var value: UInt by mutableStateOf(initial)
         private set
 
@@ -30,7 +33,12 @@ public class DrawablySeed internal constructor(initial: UInt, private val pinned
 
 @Composable
 public fun rememberDrawablySeed(pinned: UInt? = null): DrawablySeed =
-    remember(pinned) { DrawablySeed(pinned ?: randomSeed(), pinned) }
+    remember(pinned) {
+        DrawablySeed(
+            pinned ?: randomSeed(),
+            pinned,
+        )
+    }
 
 /**
  * Draws the control again from scratch when a pointer presses or arrives.

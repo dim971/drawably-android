@@ -19,7 +19,10 @@ public object DrawablyTilt {
      * The angle a seed produces, drawn from the same PRNG the sketches use so a
      * pinned seed gives a pinned lean.
      */
-    public fun angle(seed: UInt, maxDegrees: Float = DEFAULT_MAX_DEGREES): Float {
+    public fun angle(
+        seed: UInt,
+        maxDegrees: Float = DEFAULT_MAX_DEGREES,
+    ): Float {
         val rand = Mulberry32(seed)
         return ((rand.next() * 2 - 1) * maxDegrees).toFloat()
     }
@@ -47,5 +50,4 @@ public fun Modifier.drawablyTilt(
 }
 
 /** Leans this composable by an exact angle. */
-public fun Modifier.drawablyTilt(degrees: Float): Modifier =
-    graphicsLayer { rotationZ = degrees }
+public fun Modifier.drawablyTilt(degrees: Float): Modifier = graphicsLayer { rotationZ = degrees }

@@ -32,7 +32,6 @@ android {
     testOptions {
         unitTests.isReturnDefaultValues = true
     }
-
 }
 
 // Configured, never run: publishing needs credentials and a signing key this

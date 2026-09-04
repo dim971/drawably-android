@@ -53,7 +53,10 @@ private fun Sketched(content: @Composable () -> Unit) {
 
 /** Every component, each row showing the real thing rather than a screenshot. */
 @Composable
-fun CatalogHomeScreen(onOpen: (String) -> Unit, contentPadding: PaddingValues) {
+fun CatalogHomeScreen(
+    onOpen: (String) -> Unit,
+    contentPadding: PaddingValues,
+) {
     LazyColumn(
         contentPadding = contentPadding,
         modifier = Modifier.fillMaxSize(),
@@ -71,10 +74,11 @@ fun CatalogHomeScreen(onOpen: (String) -> Unit, contentPadding: PaddingValues) {
         items(catalog) { entry ->
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable { onOpen(entry.id) }
-                    .padding(horizontal = 16.dp, vertical = 12.dp),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .clickable { onOpen(entry.id) }
+                        .padding(horizontal = 16.dp, vertical = 12.dp),
             ) {
                 Column(Modifier.weight(1f)) {
                     Text(entry.name, fontWeight = FontWeight.Medium)
@@ -96,14 +100,18 @@ fun CatalogHomeScreen(onOpen: (String) -> Unit, contentPadding: PaddingValues) {
 
 /** One component: what it is, every variant of it live, and the code for each. */
 @Composable
-fun ComponentScreen(entry: CatalogEntry, contentPadding: PaddingValues) {
+fun ComponentScreen(
+    entry: CatalogEntry,
+    contentPadding: PaddingValues,
+) {
     Column(
         verticalArrangement = Arrangement.spacedBy(20.dp),
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-            .padding(contentPadding)
-            .padding(16.dp),
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .padding(contentPadding)
+                .padding(16.dp),
     ) {
         Text(entry.summary, color = MaterialTheme.colorScheme.onSurfaceVariant)
         PenControls()
@@ -139,11 +147,12 @@ fun ComponentScreen(entry: CatalogEntry, contentPadding: PaddingValues) {
 fun AboutScreen(contentPadding: PaddingValues) {
     Column(
         verticalArrangement = Arrangement.spacedBy(18.dp),
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-            .padding(contentPadding)
-            .padding(24.dp),
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .padding(contentPadding)
+                .padding(24.dp),
     ) {
         Text(
             "Hand-drawn UI controls. Every composition a fresh pen sketch, boiling like a doodle.",
