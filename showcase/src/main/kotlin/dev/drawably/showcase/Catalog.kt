@@ -21,6 +21,7 @@ import dev.drawably.compose.components.DrawablyDivider
 import dev.drawably.compose.components.DrawablyList
 import dev.drawably.compose.components.DrawablyListMarker
 import dev.drawably.compose.components.DrawablyTone
+import dev.drawably.compose.sketch.drawablyTilt
 import dev.drawably.compose.theme.DrawablyText
 
 /** One demo on a component's screen: a live sample and the code behind it. */
@@ -331,6 +332,47 @@ val catalog: List<CatalogEntry> = listOf(
             ) {
                 Column(Modifier.padding(8.dp)) {
                     DrawablyDecoratedText("zero dependencies", DrawablyDecoration.Circle)
+                }
+            },
+        ),
+    ),
+    CatalogEntry(
+        name = "Tilt",
+        summary = "A small hand-placed lean, on any control.",
+        preview = {
+            DrawablyBadge(modifier = Modifier.drawablyTilt(5u, maxDegrees = 4f), seed = 5u) {
+                DrawablyText("tilt", style = mono)
+            }
+        },
+        demos = listOf(
+            Demo(
+                title = "Tilt",
+                note = "The lean is picked once and held, so a control does not shift when it re-sketches.",
+                code = """
+                DrawablyButton("Done", ::submit, modifier = Modifier.drawablyTilt())
+
+                DrawablyCard(modifier = Modifier.drawablyTilt(degrees = -1.5f)) { }
+                """.trimIndent(),
+            ) {
+                Column(verticalArrangement = Arrangement.spacedBy(18.dp)) {
+                    Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                        DrawablyButton(
+                            "Done",
+                            {},
+                            variant = DrawablyButtonVariant.Solid,
+                            modifier = Modifier.drawablyTilt(3u),
+                        )
+                        DrawablyButton(
+                            "Save",
+                            {},
+                            variant = DrawablyButtonVariant.Scribble,
+                            modifier = Modifier.drawablyTilt(11u),
+                        )
+                        DrawablyButton("Cancel", {}, modifier = Modifier.drawablyTilt(19u))
+                    }
+                    DrawablyCard(modifier = Modifier.drawablyTilt(degrees = -1.5f), seed = 7u) {
+                        DrawablyText("pinned to -1.5°")
+                    }
                 }
             },
         ),

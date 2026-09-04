@@ -43,6 +43,7 @@ All fifteen upstream controls, with upstream's defaults.
 | `DrawablyDecoratedText` | `Underline`, `Highlight` or `Circle`, one mark per line the text wraps onto. |
 | `Modifier.drawablyUnderline()` / `drawablyHighlight()` / `drawablyCircle()` | The same marks as a single box, for anything that is not text. |
 | `DrawablyArrowLayer` | A sketched arrow between two named anchors. |
+| `Modifier.drawablyTilt()` | Leans a control a couple of degrees, so a group looks laid out by hand. Seeded, so it is stable — and the same seed leans the same way on iOS. |
 
 Every control wraps a real Foundation control — `toggleable`, `selectable`,
 `BasicTextField` — so TalkBack, focus and keyboard all behave as they would
