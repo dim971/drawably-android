@@ -104,7 +104,9 @@ public fun DrawablyBadge(
     Box(
         modifier = modifier
             .drawablySketch(state, layers)
-            .padding(horizontal = 7.dp, vertical = 1.dp),
+            // the label has to clear the sketched outline, which moves with
+            // the theme's stroke width and roughness
+            .padding(DrawablyGeometry.badgePadding(state.theme.width, state.theme.roughness)),
         content = content,
     )
 }

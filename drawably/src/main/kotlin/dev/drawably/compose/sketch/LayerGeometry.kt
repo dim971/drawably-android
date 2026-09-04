@@ -9,6 +9,9 @@ import dev.drawably.compose.core.ellipse
 import dev.drawably.compose.core.line
 import dev.drawably.compose.core.roundedRect
 import dev.drawably.compose.core.scribbleFill
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import kotlin.math.min
 
 /**
@@ -181,6 +184,27 @@ public object DrawablyGeometry {
     }
 
     // region Badge
+
+    /**
+     * How far an outline's stroke can reach inside its box: the inset it is
+     * drawn at, half its own width, and the jitter of the second, wider pass.
+     *
+     * Anything that has to stay clear of the stroke — a label inside a tight
+     * box, say — has to allow for all three, and both of the last two come from
+     * the theme.
+     */
+    public fun outlineReach(width: Dp, roughness: Double): Dp =
+        (INSET + width.value / 2 + 1.5 * roughness * 1.4).dp
+
+    /**
+     * Upstream sets 1dp above and below, which leaves the label inside the
+     * stroke's own reach — at the default width it lands on the text, and a
+     * thicker pen or a rougher hand makes it worse.
+     */
+    public fun badgePadding(width: Dp, roughness: Double): PaddingValues {
+        val reach = outlineReach(width, roughness)
+        return PaddingValues(horizontal = reach + 5.dp, vertical = reach + 2.dp)
+    }
 
     public fun badgeOutline(w: Double, h: Double, o: RoughOptions): SketchPath =
         outlineRect(2.0, w, h, o)
