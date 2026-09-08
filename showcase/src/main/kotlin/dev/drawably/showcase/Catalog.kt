@@ -35,7 +35,7 @@ class Demo(
 /**
  * One component in the catalog.
  *
- * Adding a component means adding an entry here — the home list, the component
+ * Adding a component means adding an entry here: the home list, the component
  * screen and the previews all read from this one place.
  */
 class CatalogEntry(

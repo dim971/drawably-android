@@ -31,7 +31,7 @@ import kotlinx.coroutines.delay
  * state that animates it.
  *
  * Every piece of presentation is a lambda so it is read in the draw phase
- * rather than during composition — changing a trim or an offset then redraws
+ * rather than during composition, so changing a trim or an offset then redraws
  * without invalidating the generated geometry.
  */
 public class SketchLayer(
@@ -106,12 +106,12 @@ public fun rememberDrawablyBoilFrame(
  * Draws a sketch behind the content.
  *
  * The boil frames are generated once per box size, seed and options inside
- * [drawWithCache]'s cache block — never in a draw pass — and the draw pass only
+ * [drawWithCache]'s cache block (never in a draw pass), and the draw pass only
  * picks which one to stroke.
  *
  * Geometry is generated in density-independent units and the canvas is scaled
  * to pixels around it. Upstream works in CSS pixels, and roughness is an
- * absolute amplitude — generating against a pixel size would make the jitter
+ * absolute amplitude, so generating against a pixel size would make the jitter
  * three times finer on a 3x screen than on the web, which reads as a clean
  * rectangle rather than a drawn one.
  */
@@ -194,7 +194,7 @@ private fun DrawScope.drawLayer(
 
 /**
  * The leading [fraction] of the path, so a tick can be drawn on rather than
- * faded in — upstream animates `stroke-dashoffset` for the same effect.
+ * faded in. Upstream animates `stroke-dashoffset` for the same effect.
  */
 private fun Path.trimmed(fraction: Float): Path {
     val measure = PathMeasure()

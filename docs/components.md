@@ -23,7 +23,7 @@ DrawablyButton(onClick = ::submit) { DrawablyText("Done") }
 - A state recolours the ink without touching the theme. `Loading` also dims the
   button, stops it responding, and boils at 450ms instead of 1200ms.
 - Pressing lifts the outline to 1.4× its width, sinks the button, and washes its
-  inside with 18% ink; hovering washes at 10%. A solid button is skipped — it is
+  inside with 18% ink; hovering washes at 10%. A solid button is skipped: it is
   already filled.
 
 ## Card
@@ -46,7 +46,7 @@ DrawablyCheckbox(agreed, { agreed = it })          // the box on its own
 ```
 
 22dp square, `Role.Checkbox`. The tick is *drawn on* over 240ms rather than
-faded in — upstream animates `stroke-dashoffset`, this trims the path.
+faded in. Upstream animates `stroke-dashoffset`, this trims the path.
 
 ## Radio button
 
@@ -144,11 +144,11 @@ Markers are drawn in the 24dp leading gutter, each row seeded by its index.
 DrawablyDecoratedText("a fresh pen sketch", DrawablyDecoration.Underline)
 ```
 
-Marks every line the run wraps onto, straight from the `TextLayoutResult` — the
+Marks every line the run wraps onto, straight from the `TextLayoutResult`, the
 Compose equivalent of upstream's `getClientRects()`. For anything that is not
 text, `Modifier.drawablyUnderline()`, `drawablyHighlight()` and
 `drawablyCircle()` mark the whole box. They draw at 1.5dp rather than the
-control default of 2 — body copy is thinner than chrome.
+control default of 2: body copy is thinner than chrome.
 
 ## Arrow
 

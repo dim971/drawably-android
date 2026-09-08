@@ -10,7 +10,7 @@ import org.junit.Test
 internal class FormattingTest {
     @Test
     fun `rounds exact halves away from zero unlike printf`() {
-        // "%.2f" would give 0.12 / 11.38 / 0.62 here — round-half-to-even
+        // "%.2f" would give 0.12 / 11.38 / 0.62 here (round-half-to-even)
         assertEquals("0.13", jsToFixed2(0.125))
         assertEquals("0.38", jsToFixed2(0.375))
         assertEquals("0.63", jsToFixed2(0.625))

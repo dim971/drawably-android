@@ -61,8 +61,8 @@ public enum class DrawablyTone {
 }
 
 /**
- * What a button is currently doing, which recolours its ink and — for
- * [Loading] — makes the sketch boil faster.
+ * What a button is currently doing, which recolours its ink and,
+ * for [Loading], makes the sketch boil faster.
  */
 public enum class DrawablyButtonState {
     Idle,
@@ -282,7 +282,7 @@ public object DrawablyButtonWash {
     public const val HOVER: Float = 0.1f
 
     /**
-     * A press gets a stronger one — and gets it on touch devices, where hover
+     * A press gets a stronger one, and gets it on touch devices, where hover
      * never happens and the sink-and-thicken alone is easy to miss under a
      * fingertip.
      */

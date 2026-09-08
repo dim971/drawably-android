@@ -6,7 +6,7 @@
 //
 // The glyph is defined in a 100-unit em box and mapped onto whatever canvas is
 // asked for. Roughness is an absolute amplitude in the engine, so it is scaled
-// with the glyph — that is what keeps the wobble looking the same at any size.
+// with the glyph, which is what keeps the wobble looking the same at any size.
 
 import { roughCircle, roughLine } from "drawably";
 import { writeFileSync } from "node:fs";

@@ -50,7 +50,7 @@ A control without a `seed` picks a fresh one on first composition, and rolls
 another whenever it is pressed or hovered. That is the library's whole idea: the
 sketch is redrawn, not reused.
 
-Pass a `seed` to pin it — the same seed always produces the same drawing, on
+Pass a `seed` to pin it: the same seed always produces the same drawing, on
 this platform and on iOS:
 
 ```kotlin
@@ -62,14 +62,14 @@ DrawablyButton("Done", {}, seed = 42u)
 Geometry is generated in **density-independent units** and the canvas is scaled
 to pixels around it. Roughness is an absolute amplitude in the engine, so
 generating against a pixel size would make the jitter three times finer on a 3x
-screen than on the web — the controls come out looking like clean rectangles.
+screen than on the web: the controls come out looking like clean rectangles.
 Anything you draw yourself should do the same.
 
 ## Turning the movement off
 
 Setting `boil` to `0` renders one still frame instead of three, and skips the
 ticker entirely. Zeroing the system's animator duration scale does the same, and
-additionally stops the press and hover re-sketch — matching what upstream does
+additionally stops the press and hover re-sketch, matching what upstream does
 under `prefers-reduced-motion`.
 
 ## Drawing your own shapes
@@ -85,8 +85,8 @@ Available: `Rough.line`, `roundedRect`, `circle`, `ellipse`, `arrow`,
 `checkmark`, `scribbleFill`, and `Rough.variants` to get the boil frames of any
 of them.
 
-`DrawablyGeometry` holds the per-control geometry — `buttonOutline`,
-`checkboxCheck`, `toggleKnob` and the rest — if you want a shape that matches an
+`DrawablyGeometry` holds the per-control geometry (`buttonOutline`,
+`checkboxCheck`, `toggleKnob` and the rest) if you want a shape that matches an
 existing control exactly. `DrawablyGeometry.outlineReach(width, roughness)`
 tells you how far inside its box a sketched outline can reach, which is what to
 allow if you are putting your own content inside one.

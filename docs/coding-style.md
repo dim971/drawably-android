@@ -36,8 +36,8 @@ Modifier extensions are ordinary functions and stay camel case:
 
 ### Prefixing
 
-Everything public is prefixed `Drawably` — `DrawablyButton`, `DrawablyTheme`,
-`DrawablyGeometry` — because this library is designed to sit alongside whatever
+Everything public is prefixed `Drawably` (`DrawablyButton`, `DrawablyTheme`,
+`DrawablyGeometry`) because this library is designed to sit alongside whatever
 design system an app already uses, and `Button` would collide.
 
 `Rough`, `SketchPath`, `Subpath` and `Pt` are the exception. They are the
@@ -74,7 +74,7 @@ stream` beats `testPrng`.
 ## Documentation
 
 KDoc on every public member. Follow the conventions' advice and skip `@param` /
-`@return` tags — fold the description into the prose and link parameters with
+`@return` tags. Fold the description into the prose and link parameters with
 brackets:
 
 ```kotlin
@@ -126,7 +126,7 @@ already uses, and it is why label colours travel through
 
 **Geometry is generated in density-independent units.** Never pixels. Roughness
 is an absolute amplitude in the engine, so generating against a pixel size makes
-the jitter three times finer on a 3x screen — the tests still pass and the
+the jitter three times finer on a 3x screen: the tests still pass and the
 controls come out looking like clean rectangles.
 
 **Anything that moves is read in the draw phase.** The boil frame, a layer's
@@ -136,7 +136,7 @@ and regenerates the geometry every time a finger touches a control.
 
 **The engine is a transcription, not an interpretation.** Anything under `core/`
 mirrors upstream's structure and operation order, including things that would
-otherwise be refactored away. The golden fixtures enforce this — see
+otherwise be refactored away. The golden fixtures enforce this. See
 [fidelity.md](fidelity.md).
 
 **The sketch carries no semantics.** Every control wraps a real Foundation

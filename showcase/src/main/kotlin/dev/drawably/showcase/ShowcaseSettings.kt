@@ -19,7 +19,7 @@ class ShowcaseSettings {
     var theme by mutableStateOf(DrawablyTheme())
 
     /**
-     * Bumping this re-keys the content, so every control picks a fresh seed —
+     * Bumping this re-keys the content, so every control picks a fresh seed:
      * the closest thing to upstream's `resketch()` across a whole page.
      */
     var resketchToken by mutableIntStateOf(0)

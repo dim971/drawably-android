@@ -16,6 +16,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # The em dash is banned in this repository; see CLAUDE.md.
+      - name: No em dash
+        run: |
+          if git grep -In $'\xe2\x80\x94' -- .; then
+            echo "::error::U+2014 found; use a comma, a colon or a full stop"
+            exit 1
+          fi
+
       - uses: actions/setup-java@v4
         with:
           distribution: temurin

@@ -1,4 +1,4 @@
-# Drawably for Jetpack Compose — working notes
+# Drawably for Jetpack Compose: working notes
 
 A Compose port of the web library [Drawably](https://www.drawably.dev)
 (MIT, © 2026 Daniel Belyi). Its twin is
@@ -13,7 +13,7 @@ deliberately.
 package. The tests rebuild each case through the Kotlin engine and compare
 strings. There is no tolerance and there is not meant to be one.
 
-If a golden fails, the port has drifted — find out why. Do not widen anything,
+If a golden fails, the port has drifted. Find out why. Do not widen anything,
 do not regenerate the fixtures to make a failure go away. Regenerating is only
 correct when deliberately tracking a new upstream version.
 
@@ -31,7 +31,7 @@ Three JVM/JavaScript differences already cost time to find, all documented in
 
 **Units.** Geometry is generated in density-independent units and the canvas
 scaled to pixels around it. Roughness is an absolute amplitude, so generating
-against a pixel size makes the jitter three times finer on a 3x screen — the
+against a pixel size makes the jitter three times finer on a 3x screen: the
 goldens still pass and the controls look like clean rectangles.
 
 **Draw phase, not composition.** The frame index, a layer's trim, offset, scale,
@@ -43,12 +43,12 @@ regenerates the geometry every time a finger touches a control.
 
 ```
 drawably/src/main/kotlin/dev/drawably/compose/
-  core/         pure maths — PRNG, sampling, jitter, shapes, JsMath. No Compose.
+  core/         pure maths: PRNG, sampling, jitter, shapes, JsMath. No Compose.
   theme/        DrawablyTheme, its CompositionLocal, the content colour
   sketch/       layer geometry, roles, the renderer, seeds, tilt
   components/   the fifteen controls
 showcase/       the catalog app
-Tools/          gen-goldens.mjs, gen-icon.mjs — Node, run by hand
+Tools/          gen-goldens.mjs, gen-icon.mjs: Node, run by hand
 ```
 
 `docs/architecture.md` explains how a sketch reaches the screen.
@@ -68,6 +68,9 @@ Tools/          gen-goldens.mjs, gen-icon.mjs — Node, run by hand
   enforces the mechanical half. If explicit API mode complains, write the type,
   do not relax the mode.
 - Comments explain why, not what.
+- **No em dash (U+2014).** Not in code, comments, docs, commit messages
+  or issue and PR text. Use a comma, a colon, a semicolon, parentheses
+  or a full stop. CI fails the build if the character reappears.
 
 ## Verifying
 
@@ -86,6 +89,6 @@ No `JAVA_HOME` is needed: the build declares its own daemon JVM criteria.
 
 ## Staying in step with iOS
 
-A change to shared behaviour — geometry, theming, a control's states, a new
-modifier — should land in both repositories. The Swift port mirrors this
+A change to shared behaviour (geometry, theming, a control's states, a new
+modifier) should land in both repositories. The Swift port mirrors this
 structure and both replay the same `goldens.json`.

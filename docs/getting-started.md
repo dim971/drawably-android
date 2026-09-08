@@ -58,7 +58,7 @@ See [theming.md](theming.md) for every property.
 ## Pinning a sketch
 
 Every control takes an optional `seed`. Without one it picks a fresh sketch each
-time it enters composition, which is the point — but previews and screenshot
+time it enters composition, which is the point, but previews and screenshot
 tests want the same drawing every run:
 
 ```kotlin
@@ -101,6 +101,6 @@ DrawablyCard(modifier = Modifier.drawablyTilt(degrees = -1.5f)) { … }
 
 ## Where to go next
 
-- [components.md](components.md) — the full reference
-- [theming.md](theming.md) — the theme, seeds, and drawing your own shapes
-- [architecture.md](architecture.md) — how a sketch reaches the screen
+- [components.md](components.md): the full reference
+- [theming.md](theming.md): the theme, seeds, and drawing your own shapes
+- [architecture.md](architecture.md): how a sketch reaches the screen

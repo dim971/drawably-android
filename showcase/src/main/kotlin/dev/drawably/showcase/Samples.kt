@@ -165,6 +165,6 @@ fun LoadingButtonSample() {
             },
             state = state,
         )
-        Text("Tap it — a loading button boils at 450ms instead of 1200ms.")
+        Text("Tap it: a loading button boils at 450ms instead of 1200ms.")
     }
 }

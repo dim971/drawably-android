@@ -245,7 +245,7 @@ public object DrawablyGeometry {
     /**
      * A pen tail on the popup's top edge, pointing back at the control it
      * belongs to. Two strokes meeting at a point, drawn the way an arrow head
-     * is — without it the popup floats unattached, since it carries none of the
+     * is. Without it the popup floats unattached, since it carries none of the
      * platform's own chrome.
      */
     @Suppress("UNUSED_PARAMETER")
@@ -268,8 +268,8 @@ public object DrawablyGeometry {
      * How far an outline's stroke can reach inside its box: the inset it is
      * drawn at, half its own width, and the jitter of the second, wider pass.
      *
-     * Anything that has to stay clear of the stroke — a label inside a tight
-     * box, say — has to allow for all three, and both of the last two come from
+     * Anything that has to stay clear of the stroke (a label inside a tight
+     * box, say) has to allow for all three, and both of the last two come from
      * the theme.
      */
     public fun outlineReach(
@@ -279,7 +279,7 @@ public object DrawablyGeometry {
 
     /**
      * Upstream sets 1dp above and below, which leaves the label inside the
-     * stroke's own reach — at the default width it lands on the text, and a
+     * stroke's own reach: at the default width it lands on the text, and a
      * thicker pen or a rougher hand makes it worse.
      */
     public fun badgePadding(

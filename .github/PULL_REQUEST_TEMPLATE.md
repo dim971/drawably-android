@@ -8,7 +8,7 @@
 - [ ] No new Kotlin or Lint warnings
 - [ ] The golden fixtures still pass (see `docs/fidelity.md`)
 - [ ] Geometry is in density-independent units, not pixels
-- [ ] If this changes shared behaviour, the [iOS twin](https://github.com/dim971/drawably-ios) needs the same change — or the description says why not
+- [ ] If this changes shared behaviour, the [iOS twin](https://github.com/dim971/drawably-ios) needs the same change, or the description says why not
 
 ## Drawing changes
 

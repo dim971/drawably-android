@@ -99,7 +99,7 @@ public object Rough {
 
     /**
      * Nudges every point by up to [amp] in each axis. The x draw always precedes
-     * the y draw — reordering them would desynchronise the whole PRNG stream and
+     * the y draw; reordering them would desynchronise the whole PRNG stream and
      * change every sketch downstream.
      */
     public fun jitter(
@@ -124,7 +124,7 @@ public object Rough {
 
     /**
      * Draws the shape twice from one PRNG stream, the second pass 1.4× wider than
-     * the first — the overlap is what reads as a pen going over a line.
+     * the first; the overlap is what reads as a pen going over a line.
      */
     internal fun doubleStroke(
         points: List<Pt>,

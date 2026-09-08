@@ -21,5 +21,5 @@ it is resolved.
 
 This is a drawing library with no network access, no persistence, no
 credentials and no dependencies. The plausible surface is small: input that
-makes the geometry misbehave — a size, a seed or a theme value that causes a
+makes the geometry misbehave: a size, a seed or a theme value that causes a
 crash, a hang, or unbounded memory use. Those are worth reporting.

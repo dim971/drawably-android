@@ -8,7 +8,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
-/** `#2724d1` — upstream's default ink. */
+/** `#2724d1`, upstream's default ink. */
 public val DrawablyPenBlue: Color = Color(0xFF2724D1)
 
 /** `#d12724` */
@@ -17,7 +17,7 @@ public val DrawablyError: Color = Color(0xFFD12724)
 /** `#188a42` */
 public val DrawablySuccess: Color = Color(0xFF188A42)
 
-/** `#6e675f` — the warm grey of the neutral tone. */
+/** `#6e675f`, the warm grey of the neutral tone. */
 public val DrawablyNeutral: Color = Color(0xFF6E675F)
 
 /**

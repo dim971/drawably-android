@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  A lowercase "d" sketched by the library's own stroke engine — the same
+  A lowercase "d" sketched by the library's own stroke engine: the same
   roughCircle and roughLine a button's border is drawn with, at seed 19. Sized
   to sit inside the adaptive icon's 66dp safe circle once the stroke width and
   the jitter are accounted for, so a round launcher mask does not clip the

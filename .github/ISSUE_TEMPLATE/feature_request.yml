@@ -6,7 +6,7 @@ body:
     attributes:
       value: |
         This library is a port. If the feature exists in
-        [upstream Drawably](https://www.drawably.dev), say so — that makes it a
+        [upstream Drawably](https://www.drawably.dev), say so, because that makes it a
         gap rather than a new idea, and it gets treated differently.
 
   - type: textarea
@@ -29,8 +29,8 @@ body:
     attributes:
       label: Does upstream have this?
       options:
-        - "Yes — this port is missing it"
-        - "No — it would be new"
+        - "Yes, this port is missing it"
+        - "No, it would be new"
         - "Not sure"
     validations:
       required: true

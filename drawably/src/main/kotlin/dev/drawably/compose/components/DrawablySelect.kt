@@ -41,7 +41,7 @@ import dev.drawably.compose.sketch.rememberDrawablySketchState
 
 /**
  * A select drawn as a sketched box with a pen chevron, opening a sketched
- * popup rather than the platform's own — the option list carries a hand-drawn
+ * popup rather than the platform's own: the option list carries a hand-drawn
  * frame and tick, the way upstream draws them into a customisable `<select>`.
  *
  * ```kotlin
@@ -91,7 +91,7 @@ public fun <T> DrawablySelect(
                     .padding(end = 34.dp),
         ) {
             // Every option is laid out invisibly under the chosen one, so the
-            // box is already as wide as the widest — picking never shifts the
+            // box is already as wide as the widest, so picking never shifts the
             // layout around it.
             Box {
                 options.forEach { option ->

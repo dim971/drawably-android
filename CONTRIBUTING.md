@@ -11,8 +11,8 @@ cd drawably-android
 ./gradlew :showcase:installDebug        # the catalog app
 ```
 
-The build declares its own daemon JVM criteria, so Gradle picks a JDK 21 itself —
-there is no `JAVA_HOME` to set. In Android Studio, open the project and pick the
+The build declares its own daemon JVM criteria, so Gradle picks a JDK 21 itself,
+so there is no `JAVA_HOME` to set. In Android Studio, open the project and pick the
 **showcase** run configuration; it is checked in.
 
 AGP is pinned to a version Android Studio can sync rather than the newest
@@ -35,13 +35,13 @@ Three things the review will look for:
 tolerated becomes a warning that is ignored.
 
 **The goldens still pass.** If you touch anything under `core/` or
-`sketch/DrawablyGeometry.kt`, the fixtures are the contract — see
+`sketch/DrawablyGeometry.kt`, the fixtures are the contract. See
 [docs/fidelity.md](docs/fidelity.md). Changing them means changing what this
 library claims to be, so say why in the pull request.
 
 **Parity with iOS.** This library has a
-[twin](https://github.com/dim971/drawably-ios). A change to shared behaviour —
-geometry, theming, a control's states — should land in both, or say plainly why
+[twin](https://github.com/dim971/drawably-ios). A change to shared behaviour
+(geometry, theming, a control's states) should land in both, or say plainly why
 it should not.
 
 ## Conventions
@@ -64,7 +64,7 @@ enforces. The short version:
 ## Reporting a bug
 
 A seed makes a sketch reproducible. If the report is about how something is
-drawn, pass a pinned `seed` and include it — it turns "it looks wrong sometimes"
+drawn, pass a pinned `seed` and include it: it turns "it looks wrong sometimes"
 into something anyone can reproduce.
 
 ## Code of conduct

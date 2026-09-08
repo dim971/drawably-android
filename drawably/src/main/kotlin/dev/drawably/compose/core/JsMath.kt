@@ -11,7 +11,7 @@ import kotlin.math.sqrt
 // but sample counts come from `ceil(length / step)`, and an arrow head is
 // exactly 12 long sampled every 4. Landing on the wrong side of that boundary
 // adds a point, which shifts every subsequent PRNG draw and changes the rest of
-// the shape — so these have to agree exactly, not approximately.
+// the shape, so these have to agree exactly, not approximately.
 
 /**
  * V8 implements `Math.cos`, `Math.sin` and `Math.atan2` with fdlibm, and so

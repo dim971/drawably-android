@@ -13,7 +13,7 @@ import androidx.compose.ui.text.TextStyle
  *
  * This library sits on Compose Foundation rather than Material, so it cannot
  * set Material's `LocalContentColor`. A solid button's label has to be paper
- * rather than ink, so it publishes the colour here instead — [DrawablyText]
+ * rather than ink, so it publishes the colour here instead: [DrawablyText]
  * reads it, and a slot filled with someone else's text component can too.
  */
 public val LocalDrawablyContentColor: ProvidableCompositionLocal<Color> =

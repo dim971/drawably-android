@@ -4,7 +4,7 @@ package dev.drawably.compose.core
  * The seeded PRNG every sketch is drawn from.
  *
  * A direct port of upstream `src/prng.ts`. JavaScript's `Math.imul`, `>>>` and
- * `|` all work on 32-bit patterns, so this [UInt] arithmetic is bit-identical —
+ * `|` all work on 32-bit patterns, so this [UInt] arithmetic is bit-identical,
  * which is what lets the golden fixtures generated from the npm package pin
  * this port down exactly.
  */

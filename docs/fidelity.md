@@ -24,7 +24,7 @@ tests rebuild every case through the Kotlin engine, serialise it with a debug
 ```
 
 A failure means the port has drifted. It never means a tolerance needs
-widening — there is no tolerance.
+widening. There is no tolerance.
 
 ## Regenerating
 
@@ -42,7 +42,7 @@ Three reconciliations, all in `core/JsMath.kt` and `core/SvgPath.kt`.
 
 **Trigonometry.** V8 implements `cos`, `sin` and `atan2` with fdlibm, and so
 does `StrictMath`; `java.lang.Math` uses intrinsics that differ in the last ulp.
-That is invisible in a rounded coordinate but decides `ceil(length / step)` —
+That is invisible in a rounded coordinate but decides `ceil(length / step)`,
 and an arrow head is exactly 12 long, sampled every 4. One extra sample point
 shifts every later PRNG draw and changes the rest of the shape. This one cost
 real time to find, because the symptom was a wrong-looking arrow, not a wrong
@@ -54,7 +54,7 @@ means different.
 
 **Number formatting.** `Number.prototype.toFixed(2)` rounds exact halves away
 from zero; `"%.2f"` rounds them to even. `0.125` is `0.13` upstream and would be
-`0.12` here — and any coordinate that is a multiple of an eighth lands on one.
+`0.12` here, and any coordinate that is a multiple of an eighth lands on one.
 
 ## A related trap, not about fidelity
 
