@@ -6,7 +6,18 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
-## [0.1.0]
+## [0.2.0] - 2026-09-10
+
+### Added
+
+- `DrawablyProgress`: a row of pen boxes, hatched one by one as steps complete.
+  This is the first control here with no upstream counterpart, so it carries no
+  golden fixture; the rest of the library remains a byte-identical
+  transcription. It is built from the public engine and the existing layer
+  conventions, and it carries the platform's own progress semantics.
+  A lambda overload takes a fraction, the way `LinearProgressIndicator` does.
+
+## [0.1.0] - 2026-09-08
 
 First release. A Jetpack Compose port of [Drawably](https://www.drawably.dev)
 0.3.10.
@@ -36,5 +47,6 @@ First release. A Jetpack Compose port of [Drawably](https://www.drawably.dev)
 - `Modifier.drawablyTilt()` is new: on drawably.dev the scatter is the demo
   page's own CSS rather than part of the library.
 
-[Unreleased]: https://github.com/dim971/drawably-android/compare/0.1.0...HEAD
+[Unreleased]: https://github.com/dim971/drawably-android/compare/0.2.0...HEAD
+[0.2.0]: https://github.com/dim971/drawably-android/releases/tag/0.2.0
 [0.1.0]: https://github.com/dim971/drawably-android/releases/tag/0.1.0

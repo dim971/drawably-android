@@ -55,7 +55,7 @@ it.
 
 ```kotlin
 dependencies {
-    implementation("dev.drawably:drawably-compose:0.1.0")
+    implementation("dev.drawably:drawably-compose:0.2.0")
 }
 ```
 
@@ -84,7 +84,7 @@ fun Example() {
 
 ## Components
 
-All fifteen upstream controls, with upstream's defaults.
+All fifteen upstream controls, with upstream's defaults, plus one addition this port makes on its own, marked as such.
 
 | Component | What it is |
 | --- | --- |
@@ -97,6 +97,7 @@ All fifteen upstream controls, with upstream's defaults.
 | `DrawablyTextArea` | Several lines of it. |
 | `DrawablySelect` | A pen chevron opening a sketched list, tailed back to the field, with no platform chrome around it. Pre-sized to the widest option so picking never shifts the layout. |
 | `DrawablyDivider` | A pen line across the available width. |
+| `DrawablyProgress` | A row of pen boxes, hatched one by one as steps complete. A lambda overload takes a fraction instead. **Not an upstream control.** |
 | `DrawablyBadge` | A small sharp-cornered tag. `Outline` or `Scribble`. |
 | `DrawablyList` | Bullets drawn in the gutter. `Dash` or `Check`. |
 | `DrawablyDecoratedText` | `Underline`, `Highlight` or `Circle`, one mark per line the text wraps onto. |

@@ -378,6 +378,36 @@ public object DrawablyGeometry {
 
     // endregion
 
+    // region Progress
+
+    /** How wide one step of a progress track is. */
+    public const val PROGRESS_SEGMENT_WIDTH: Double = 34.0
+
+    /** How tall one step is. */
+    public const val PROGRESS_SEGMENT_HEIGHT: Double = 18.0
+
+    /** The gap between two steps. */
+    public const val PROGRESS_SEGMENT_GAP: Double = 6.0
+
+    /**
+     * One step's box, rounded a little less than a button's so a short box
+     * still reads as a box rather than as a pill.
+     */
+    public fun progressSegment(
+        w: Double,
+        h: Double,
+        o: RoughOptions,
+    ): SketchPath = outlineRect(4.0, w, h, o)
+
+    /** The hatching that marks a step as done, inside its border. */
+    public fun progressScribble(
+        w: Double,
+        h: Double,
+        o: RoughOptions,
+    ): SketchPath = Rough.scribbleFill(INSET + 1, INSET + 1, w - 2 * INSET - 2, h - 2 * INSET - 2, o)
+
+    // endregion
+
     /** Breathing room between an anchor's edge and the arrow's end. */
     public const val ARROW_GAP: Double = 6.0
 }

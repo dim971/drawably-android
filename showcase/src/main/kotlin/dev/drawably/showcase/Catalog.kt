@@ -20,6 +20,7 @@ import dev.drawably.compose.components.DrawablyDecoration
 import dev.drawably.compose.components.DrawablyDivider
 import dev.drawably.compose.components.DrawablyList
 import dev.drawably.compose.components.DrawablyListMarker
+import dev.drawably.compose.components.DrawablyProgress
 import dev.drawably.compose.components.DrawablyTone
 import dev.drawably.compose.sketch.drawablyTilt
 import dev.drawably.compose.theme.DrawablyText
@@ -256,6 +257,37 @@ val catalog: List<CatalogEntry> =
             demos =
                 listOf(
                     Demo(title = "Divider", code = "DrawablyDivider()") { DrawablyDivider() },
+                ),
+        ),
+        CatalogEntry(
+            name = "Progress",
+            summary = "A row of pen boxes, hatched one by one. Not an upstream control.",
+            preview = { DrawablyProgress(step = 3, total = 7) },
+            demos =
+                listOf(
+                    Demo(
+                        title = "Steps",
+                        note = "Each box runs off its own seed, so a track looks drawn rather than printed.",
+                        code = "DrawablyProgress(step = 3, total = 7)",
+                    ) { DrawablyProgress(step = 3, total = 7) },
+                    Demo(
+                        title = "The ends",
+                        code =
+                            """
+                            DrawablyProgress(step = 0, total = 5)
+                            DrawablyProgress(step = 5, total = 5)
+                            """.trimIndent(),
+                    ) {
+                        Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                            DrawablyProgress(step = 0, total = 5)
+                            DrawablyProgress(step = 5, total = 5)
+                        }
+                    },
+                    Demo(
+                        title = "From a fraction",
+                        note = "The lambda overload redraws without regenerating the track.",
+                        code = "DrawablyProgress(progress = { 0.42f }, steps = 10)",
+                    ) { DrawablyProgress(progress = { 0.42f }, steps = 10) },
                 ),
         ),
         CatalogEntry(
