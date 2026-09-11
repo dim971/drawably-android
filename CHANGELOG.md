@@ -6,6 +6,15 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Note
+
+- The iOS port's 0.2.2 fixes a crash when a control swaps one variant for
+  another and its layer set grows. It has no counterpart here, and no Android
+  release corresponds to it: `drawablySketch` generates its paths inside the
+  same `drawWithCache` block that draws them, so a layer set and its paths can
+  never come from different passes. Checked rather than assumed, when the iOS
+  fix was made.
+
 ## [0.2.1] - 2026-09-11
 
 ### Fixed
