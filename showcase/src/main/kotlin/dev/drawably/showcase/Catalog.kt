@@ -284,6 +284,13 @@ val catalog: List<CatalogEntry> =
                         }
                     },
                     Demo(
+                        title = "A long track",
+                        note =
+                            "Boxes share the row rather than each keeping 34dp, " +
+                                "so twelve steps still fit on a phone.",
+                        code = "DrawablyProgress(step = 5, total = 12)",
+                    ) { DrawablyProgress(step = 5, total = 12) },
+                    Demo(
                         title = "From a fraction",
                         note = "The lambda overload redraws without regenerating the track.",
                         code = "DrawablyProgress(progress = { 0.42f }, steps = 10)",

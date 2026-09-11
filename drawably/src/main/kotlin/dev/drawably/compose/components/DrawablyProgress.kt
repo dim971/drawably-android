@@ -3,8 +3,9 @@ package dev.drawably.compose.components
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
@@ -119,7 +120,16 @@ public fun DrawablyProgress(
             Box(
                 modifier =
                     Modifier
-                        .width(DrawablyGeometry.PROGRESS_SEGMENT_WIDTH.dp)
+                        // A cap, not a width. A track of twelve boxes at a
+                        // fixed 34dp is wider than a phone, and the row it sits
+                        // in was pushing its neighbours off the screen rather
+                        // than wrapping. Boxes now share whatever the row has
+                        // and never grow past the size they were drawn at, so a
+                        // short track looks exactly as it did and a long one
+                        // still fits.
+                        .weight(1f, fill = false)
+                        .widthIn(max = DrawablyGeometry.PROGRESS_SEGMENT_WIDTH.dp)
+                        .fillMaxWidth()
                         .height(DrawablyGeometry.PROGRESS_SEGMENT_HEIGHT.dp)
                         // Each box runs off its own seed. Sharing one would draw
                         // the same rectangle seven times, which reads as a

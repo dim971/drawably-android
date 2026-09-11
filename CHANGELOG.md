@@ -6,6 +6,16 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.2.1] - 2026-09-11
+
+### Fixed
+
+- `DrawablyProgress` no longer overflows its row. Each box was a fixed 34dp
+  wide, so a track of twelve steps measured wider than a phone and pushed
+  whatever sat beside it off the screen. The width is now a cap: boxes share the
+  row and shrink when there are more of them than fit. A track with room to
+  spare is unchanged. The iOS port carries the same fix, under the same tag.
+
 ## [0.2.0] - 2026-09-10
 
 ### Added
