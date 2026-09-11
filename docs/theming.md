@@ -15,6 +15,7 @@ included, and travels down the tree the way they cascade.
 | `success` | `Color` | `#188a42` | The `Success` state |
 | `roughness` | `Double` | `1.0` | Multiplies the jitter amplitude of the base sketch |
 | `boil` | `Double` | `0.3` | Per-frame flicker amplitude. `0` renders one still frame |
+| `minimumControlHeight` | `Dp` | `48.dp` | The smallest a control is drawn, so a finger can hit it. `0.dp` gives the web library's own proportions |
 
 ## Applying it
 

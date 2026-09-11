@@ -26,6 +26,11 @@ DrawablyButton(onClick = ::submit) { DrawablyText("Done") }
   inside with 18% ink; hovering washes at 10%. A solid button is skipped: it is
   already filled.
 
+- A button is drawn at least `minimumControlHeight` tall, 48dp by default,
+  because upstream's six pixels of vertical padding give a box a mouse can click
+  and a finger cannot. Set the theme's `minimumControlHeight` to `0.dp` for the
+  web library's own proportions.
+
 ## Card
 
 <img src="images/components/card.png" alt="A sketched box around a monospaced command and a caption">

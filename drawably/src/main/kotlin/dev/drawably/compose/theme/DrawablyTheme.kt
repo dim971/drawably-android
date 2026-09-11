@@ -44,6 +44,19 @@ public data class DrawablyTheme(
     val roughness: Double = 1.0,
     /** Per-frame flicker amplitude. `0` renders a still sketch. */
     val boil: Double = 0.3,
+    /**
+     * The smallest a control is drawn, so a finger can hit it.
+     *
+     * Upstream is a web library with a mouse behind it: six pixels of vertical
+     * padding give a button about 29dp tall, which is comfortable to click and
+     * too flat to tap. Material asks for 48 and Apple for 44, so the box grows
+     * to meet it rather than only its touch target: a control that is hard to
+     * see is hard to aim at. The iOS port carries the same rule at its own
+     * platform's number.
+     *
+     * Set it to `0.dp` for the web library's own proportions.
+     */
+    val minimumControlHeight: Dp = 48.dp,
 )
 
 public val LocalDrawablyTheme: ProvidableCompositionLocal<DrawablyTheme> =

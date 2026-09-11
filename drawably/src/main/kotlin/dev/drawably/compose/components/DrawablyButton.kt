@@ -9,6 +9,7 @@ import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -186,6 +187,10 @@ public fun DrawablyButton(
                         scaleX = squash
                         scaleY = squash
                     }.alpha(buttonAlpha(enabled, state))
+                    // Before the sketch, so the drawn box grows with the node
+                    // rather than floating inside a larger touch target. See
+                    // DrawablyTheme.minimumControlHeight.
+                    .defaultMinSize(minHeight = theme.minimumControlHeight)
                     .clickable(
                         interactionSource = interactionSource,
                         indication = null,
