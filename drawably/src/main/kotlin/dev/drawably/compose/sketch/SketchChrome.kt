@@ -178,14 +178,20 @@ private fun DrawScope.drawLayer(
         if (factor != 1f) scale(factor, factor, pivot = center)
     }) {
         if (layer.role.isFilled) {
-            drawPath(path, color, alpha = layer.role.opacity, style = Fill, blendMode = layer.role.blendMode)
+            drawPath(
+                path,
+                color,
+                alpha = layer.role.opacity(theme.scribbleOpacity),
+                style = Fill,
+                blendMode = layer.role.blendMode,
+            )
         } else {
             layer.fill()?.let { drawPath(path, it, style = Fill) }
         }
         drawPath(
             path = if (trim >= 1f) path else path.trimmed(trim),
             color = color,
-            alpha = layer.role.opacity,
+            alpha = layer.role.opacity(theme.scribbleOpacity),
             style = stroke,
             blendMode = layer.role.blendMode,
         )

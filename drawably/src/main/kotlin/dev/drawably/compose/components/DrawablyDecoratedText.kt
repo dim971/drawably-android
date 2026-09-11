@@ -67,11 +67,11 @@ public fun DrawablyDecoratedText(
                 onDrawWithContent {
                     // a highlight goes behind the words; a line or a loop goes over
                     if (decoration == DrawablyDecoration.Highlight) {
-                        drawMarks(frames, decoration, color, state.frame.value)
+                        drawMarks(frames, decoration, color, state.frame.value, state.theme.scribbleOpacity)
                     }
                     drawContent()
                     if (decoration != DrawablyDecoration.Highlight) {
-                        drawMarks(frames, decoration, color, state.frame.value)
+                        drawMarks(frames, decoration, color, state.frame.value, state.theme.scribbleOpacity)
                     }
                 }
             },
@@ -120,6 +120,9 @@ private fun DrawScope.drawMarks(
     decoration: DrawablyDecoration,
     color: androidx.compose.ui.graphics.Color,
     frame: Int,
+    // Carried as a value rather than read from the composition: this draws on
+    // a canvas, where there is no theme to read.
+    scribbleOpacity: Float,
 ) {
     val role = decoration.role
     val stroke =
@@ -134,7 +137,7 @@ private fun DrawScope.drawMarks(
                 drawPath(
                     path = line.paths[frame % line.paths.size],
                     color = color,
-                    alpha = role.opacity,
+                    alpha = role.opacity(scribbleOpacity),
                     style = stroke,
                     blendMode = role.blendMode,
                 )

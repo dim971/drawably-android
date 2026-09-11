@@ -45,6 +45,15 @@ public data class DrawablyTheme(
     /** Per-frame flicker amplitude. `0` renders a still sketch. */
     val boil: Double = 0.3,
     /**
+     * How strongly a scribbled fill is drawn, from `0f` to `1f`.
+     *
+     * Upstream hatches at full ink, which reads well on a wide tag and badly
+     * on a small one: the lines cross the label in the same colour as the
+     * label, and the word stops being a word. Lowering this keeps the scribble
+     * and gives the text back. `1f` is upstream's own look.
+     */
+    val scribbleOpacity: Float = 1f,
+    /**
      * The smallest a control is drawn, so a finger can hit it.
      *
      * Upstream is a web library with a mouse behind it: six pixels of vertical

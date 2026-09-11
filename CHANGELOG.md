@@ -6,6 +6,17 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-09-11
+
+### Added
+
+- `DrawablyTheme.scribbleOpacity`, how strongly a scribbled fill is drawn.
+  Upstream hatches at full ink, which reads well on a wide tag and badly on a
+  small one: the lines cross the label in the label's own colour and the word
+  stops being a word. Lowering it keeps the scribble and gives the text back.
+  The default is `1f`, upstream's own look, so nothing changes for anyone who
+  does not ask. The iOS port carries the same property under the same tag.
+
 ## [0.3.0] - 2026-09-11
 
 ### Changed

@@ -59,5 +59,19 @@ public enum class SketchRole {
 
     public val opacity: Float get() = if (this == Wash) 0.3f else 1f
 
+    /**
+     * How strongly this layer is drawn, given the theme it is drawn with.
+     *
+     * Only two roles are ever less than solid: a wash, which is a wash by
+     * definition, and a scribble, whose strength the theme owns so a small
+     * control can keep its hatching without losing its label.
+     */
+    public fun opacity(scribble: Float): Float =
+        when (this) {
+            Wash -> 0.3f
+            Scribble -> scribble
+            else -> 1f
+        }
+
     public val blendMode: BlendMode get() = if (this == Wash) BlendMode.Multiply else BlendMode.SrcOver
 }
